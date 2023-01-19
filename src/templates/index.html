@@ -2,16 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  
-  <title>Restaurant Apps Starter Project</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xiangling Shitang</title>
 </head>
 <body>
-  <h1>Restaurant Apps Fazza</h1>
-  <p>Hallo coders! Anda berhasil menjalankan starter project.</p>
-  <p>Jangan lupa untuk menggunakan salah satu gambar yang berada pada ./images/heros sebagai background hero elemen</p>
-  <img src="./images/heros/hero-image_1.jpg" width="450" alt="">
-  <img src="./images/heros/hero-image_2.jpg" width="450" alt="">
-  <img src="./images/heros/hero-image_3.jpg" width="450" alt="">
-  <img src="./images/heros/hero-image_4.jpg" width="450" alt="">
-</body>
+  <!-- HEADER START -->
+  <header class="navbar">
+    <h1 class="navbar__title">Xiangling Shitang</h1>
+    <nav class="navbar__nav">
+      <ul class="navbar__list">
+        <li class="navbar__item"><a class="navbar__link" href="/">Home</a></li>
+        <li class="navbar__item"><a class="navbar__link" href="#">Favorite</a></li>
+        <li class="navbar__item"><a class="navbar__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- HEADER END-->
+
+  <!-- MAIN START -->
+  <main>
+    <div class="hero"><img class="hero__img" src="./images/heros/hero-image_1.jpg" alt=""></div>
+    <div>
+      <h2>Explore Restaurants</h2>
+      <catalog-item></catalog-item>
+    </div>
+  </main>
+  <!-- MAIN END -->
+
+  <!-- FOOTER START -->
+  <footer class="footer">
+    <p class="footer__copyright">Copyright &copy; 2022 - <span>Xiangling Shitang</span></p>
+  </footer>
+  <!-- FOOTER END -->
 </html>

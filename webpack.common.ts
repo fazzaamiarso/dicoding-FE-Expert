@@ -3,6 +3,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import webpack from "webpack";
 import ESLintWebpackPlugin from "eslint-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const config: webpack.Configuration = {
   entry: {
@@ -17,14 +18,18 @@ const config: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(scss|css)$/i,
+        exclude: [/\.styles.scss$/],
         use: [
-          {
-            loader: "style-loader",
-          },
-          {
-            loader: "css-loader",
-          },
+          "style-loader",
+          { loader: MiniCssExtractPlugin.loader, options: { esModule: false } },
+          "css-loader",
+          "sass-loader",
         ],
       },
     ],
@@ -43,6 +48,7 @@ const config: webpack.Configuration = {
       ],
     }),
     new ESLintWebpackPlugin(),
+    new MiniCssExtractPlugin(),
   ],
 };
 

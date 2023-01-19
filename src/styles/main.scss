@@ -1,0 +1,52 @@
+@import './reset.css';
+
+.layout {
+  width: 90%;
+  margin-inline: auto;
+}
+
+.click-area {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.navbar {
+  @extend .layout;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: .5rem;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: red;
+  }
+  &__list {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  &__link {
+    @extend .click-area;
+  }
+}
+
+.hero {
+  &__img {
+    width: 100%;
+    @media screen and (min-width: 1200px) {
+      min-width: 1000px;
+    }
+  }
+}
+
+.footer {
+  @extend .layout;
+  padding-block: 1rem;
+  &__copyright {
+    span {
+      font-style: italic;
+    }
+  }
+}

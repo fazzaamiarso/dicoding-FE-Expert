@@ -2,6 +2,7 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import webpack from "webpack";
+import ESLintWebpackPlugin from "eslint-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: {
@@ -41,6 +42,7 @@ const config: webpack.Configuration = {
         },
       ],
     }),
+    new ESLintWebpackPlugin(),
   ],
 };
 

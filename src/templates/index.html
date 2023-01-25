@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xiangling Shitang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <title>Food Hunt</title>
 </head>
 <body>
+  <a href="#skip-content" class="skip-link">Skip to content</a>
   <!-- HEADER START -->
   <header class="navbar">
-    <h1 class="navbar__title">Xiangling Shitang</h1>
+    <h1 class="navbar__title">Food Hunt</h1>
     <nav class="navbar__nav">
       <ul class="navbar__list">
         <li class="navbar__item"><a class="navbar__link" href="/">Home</a></li>
@@ -17,22 +21,66 @@
         <li class="navbar__item"><a class="navbar__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a></li>
       </ul>
     </nav>
+    <button type="button" id="menu-button" class="navbar__menu-button">
+      <span class="sr-only">Open menu button</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm8.25 5.25a.75.75 0 01.75-.75h8.25a.75.75 0 010 1.5H12a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+      </svg>      
+    </button>
+    <menu-drawer id="menu-drawer"></menu-drawer>
   </header>
   <!-- HEADER END-->
 
   <!-- MAIN START -->
-  <main>
-    <div class="hero"><img class="hero__img" src="./images/heros/hero-image_1.jpg" alt=""></div>
-    <div>
-      <h2>Explore Restaurants</h2>
-      <catalog-item></catalog-item>
+  <main id="skip-content" class="main" >
+    <div class="hero">
+      <div class="hero__overlay"></div>
+      <img class="hero__img" src="./images/heros/hero-image_2.jpg" alt="">
+      <div class="hero__content">
+        <div class="hero__content--inner">
+          <div class="hero__text">
+            <h2 class="hero__header">Find Your Next Favourite Restaurants</h2>
+            <p class="hero__desc">Our catalog is a curated list of restaurant from all over Indonesia</p>
+          </div>
+          <div class="hero__cta-group">          
+            <a href="#explore" class="hero__cta hero__cta--primary"><span>Explore Now </span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v13.19l5.47-5.47a.75.75 0 111.06 1.06l-6.75 6.75a.75.75 0 01-1.06 0l-6.75-6.75a.75.75 0 111.06-1.06l5.47 5.47V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+              </svg>              
+            </a>
+            <button type="button" class="hero__cta hero__cta--secondary">Learn more</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="explore" class="catalog">
+      <h2 class="catalog__header">Explore Restaurants</h2>
+      <ul id="catalog-list" class="catalog__list"></ul>
     </div>
   </main>
   <!-- MAIN END -->
 
   <!-- FOOTER START -->
   <footer class="footer">
-    <p class="footer__copyright">Copyright &copy; 2022 - <span>Xiangling Shitang</span></p>
+    <p class="footer__copyright">Copyright &copy; 2022 - <span>Food Hunt</span></p>
   </footer>
   <!-- FOOTER END -->
+
+  <template id="menu-drawer-template">
+        <div id="overlay" class="menu__overlay"></div>
+        <div id="menu"  class="menu">
+          <button type="button" id="close-menu" class="menu__close" aria-label="close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px;" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <nav class="menu__nav">
+            <ul class="menu__list">
+              <li class="menu__item"><a class="menu__link" href="/">Home</a></li>
+              <li class="menu__item"><a class="menu__link" href="#">Favorite</a></li>
+              <li class="menu__item"><a class="menu__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a></li>
+            </ul>
+          </nav>
+        </div>
+  </template>
 </html>

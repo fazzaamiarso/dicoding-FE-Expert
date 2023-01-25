@@ -10,6 +10,9 @@ const config: webpack.Configuration = {
     app: path.resolve(__dirname, "src/scripts/index.ts"),
     // sw: path.resolve(__dirname, 'src/scripts/sw.js'),
   },
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),

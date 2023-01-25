@@ -1,45 +1,42 @@
-/* eslint-disable no-underscore-dangle */
 import "regenerator-runtime"; /* for async await transpile */
 import "../styles/main.scss";
+import "../components";
 import catalog from "../DATA.json";
+import type MenuDrawer from "../components/menu-drawer";
 
-type Restaurant = (typeof catalog)["restaurants"][number];
+window.addEventListener("DOMContentLoaded", () => {
+  const catalogList = document.querySelector("#catalog-list");
 
-class CatalogItem extends HTMLElement {
-  private _restaurants: Restaurant[];
+  catalog.restaurants.forEach((r) => {
+    const item = document.createElement("li");
+    item.classList.add("catalog__card");
+    item.innerHTML = `
+    <div class="catalog__thumb">
+      <img src="${r.pictureId}" alt="${r.name} restaurant" class="catalog__img"/>
+      <div class="catalog__overlay"></div>
+    </div>
+    <div class="catalog__content">
+      <h3 class="catalog__title">${r.name}</h3>
+      <div class="catalog__detail">
+        <span class="catalog__rating">
+          <svg class="catalog__star" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+          </svg>
+          ${new Intl.NumberFormat("en-US", { minimumFractionDigits: 1 }).format(r.rating)}
+        </span>
+            -
+          <span>${r.city}</span>
+      </div>
+    </div>`;
 
-  constructor() {
-    super();
-    console.log();
-  }
+    catalogList.appendChild(item);
+  });
 
-  set restaurants(val: Restaurant[]) {
-    this._restaurants = val;
-    val.forEach((r) => {
-      const li = document.createElement("li");
+  const drawer = document.querySelector("#menu-drawer") as MenuDrawer;
+  const menuButton = document.querySelector("#menu-button") as HTMLButtonElement;
 
-      const img = document.createElement("img");
-      img.src = r.pictureId;
-      img.alt = r.name;
-
-      const name = document.createElement("h3");
-      const detail = document.createElement("div");
-      const city = document.createElement("span");
-      const rating = document.createElement("span");
-
-      name.textContent = r.name;
-      city.textContent = r.city;
-      rating.textContent = String(r.rating);
-      detail.append(rating, city);
-
-      li.append(img, name, detail);
-      const main = document.querySelector("main");
-      main.append(li);
-    });
-  }
-}
-
-customElements.define("catalog-item", CatalogItem);
-
-const catalogEl = document.querySelector("catalog-item") as CatalogItem;
-catalogEl.restaurants = catalog.restaurants;
+  menuButton.addEventListener("click", () => {
+    drawer.open = "true";
+    drawer.dataset.triggerId = menuButton.id;
+  });
+});

@@ -156,10 +156,9 @@ body {
     gap: 2rem;
   }
   &__cta {
-    border: none;
+    text-decoration: none;
     border-radius: $rounded-sm;
     background-color: transparent;
-    cursor: pointer;
 
     font-size: $text-xs;
     font-weight: 600;
@@ -173,7 +172,6 @@ body {
       outline-offset: 4px;
     }
     &--primary {
-      text-decoration: none;
       color: white;
       background-color: $text-indigo-600;
       
@@ -284,10 +282,41 @@ body {
 
 .footer {
   @extend .layout;
-  padding-block: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  width: 100%;
+  align-items: center;
+  padding-block: 2rem;
   &__copyright {
     span {
       font-style: italic;
+    }
+  }
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  &__link {
+    @extend .click-area;
+    display: inline-block;
+    svg {
+      margin-inline: auto;
+      width: 28px;
+      color: white;
+      transition: all 200ms ease-in-out;
+    }
+    &:hover {
+      svg {
+        color: $text-indigo-400;
+      }
+    }
+    &:focus-visible {
+      outline: 2px solid $text-indigo-600;
+      outline-offset: 4px;
     }
   }
 }

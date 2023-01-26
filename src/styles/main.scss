@@ -58,10 +58,12 @@ body {
   }
   &__link {
     @extend .click-area;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 
     color: $text-indigo-100;
     text-decoration: none;
-    font-size: $text-sm;
     font-weight: 500;
     transition: all 200ms ease-in-out;
     &:hover{
@@ -156,6 +158,10 @@ body {
     gap: 2rem;
   }
   &__cta {
+    @extend .click-area;
+    display: inline-flex;
+    align-items: center;
+
     text-decoration: none;
     border-radius: $rounded-sm;
     background-color: transparent;
@@ -175,8 +181,6 @@ body {
       color: white;
       background-color: $text-indigo-600;
       
-      display: flex;
-      align-items: center;
       gap: 0.25rem;
 
       box-shadow: $shadow-md;

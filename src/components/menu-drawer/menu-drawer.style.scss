@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/utils.scss";
 
 #menu-drawer {
     display: block;
@@ -39,6 +40,10 @@
     padding: 2rem;
     transition: all 100ms ease-in;
     &__close {
+      @extend .click-area;
+      display: block;
+      align-items: center;
+
       background-color: transparent;
       border: none;
       margin-left: auto;
@@ -50,6 +55,11 @@
       row-gap: 2rem;
     }
     &__link {
+      @extend .click-area;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+
       color: $text-indigo-700;
       font-weight: 600;
       font-size: 1.4rem;

@@ -324,3 +324,7 @@ body {
     }
   }
 }
+
+.favorite {
+  @extend .layout;
+}

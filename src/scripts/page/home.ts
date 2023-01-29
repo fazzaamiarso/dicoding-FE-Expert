@@ -1,4 +1,4 @@
-import catalog from "../../DATA.json";
+import RestaurantAPI from "../api";
 
 class HomePage {
   static render() {
@@ -30,10 +30,11 @@ class HomePage {
     `;
   }
 
-  static pageDidMount() {
+  static async pageDidMount() {
     const catalogList = document.querySelector("#catalog-list");
+    const data = await RestaurantAPI.getAll();
 
-    catalog.restaurants.forEach((r) => {
+    data.restaurants.forEach((r: any) => {
       const formattedRating = new Intl.NumberFormat("en-US", { minimumFractionDigits: 1 }).format(
         r.rating
       );
@@ -41,7 +42,9 @@ class HomePage {
       item.classList.add("catalog__card");
       item.innerHTML = `
           <div class="catalog__thumb">
-            <img src="${r.pictureId}" alt="${r.name} restaurant" class="catalog__img"/>
+            <img src="${RestaurantAPI.buildImageURL(r.pictureId)}" alt="${
+        r.name
+      } restaurant" class="catalog__img"/>
             <div class="catalog__overlay"></div>
           </div>
           <div class="catalog__content">
@@ -56,6 +59,7 @@ class HomePage {
                   -
                 <span>${r.city}</span>
             </div>
+            <a href="#/restaurants/${r.id}">See detail</a>
           </div>`;
 
       catalogList.appendChild(item);

@@ -32,9 +32,16 @@ class HomePage {
 
   static async pageDidMount() {
     const catalogList = document.querySelector("#catalog-list");
-    const data = await RestaurantAPI.getAll();
+    const response = await RestaurantAPI.getAll();
 
-    data.restaurants.forEach((r: any) => {
+    if (response.error) {
+      catalogList.innerHTML = `
+        <p>${response.message}</p>
+      `;
+      return;
+    }
+
+    response.data.forEach((r) => {
       const formattedRating = new Intl.NumberFormat("en-US", { minimumFractionDigits: 1 }).format(
         r.rating
       );

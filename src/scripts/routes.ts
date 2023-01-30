@@ -1,20 +1,19 @@
 /* eslint-disable no-underscore-dangle */
-
-interface Route {
-  render(...args: any[]): string;
-  pageDidMount(...args: any[]): void;
+interface RouteDef {
+  path: string;
+  component?: string;
 }
 
 class HashRouter {
-  private _routes: Record<string, any>;
+  private _routes: RouteDef[];
 
   private _root: HTMLElement;
 
   private _params: Record<string, string>;
 
-  private _routeMatch: string;
+  private _routeMatchIdx: number;
 
-  constructor({ routes, root }: { routes: Record<string, Route>; root: HTMLElement }) {
+  constructor({ routes, root }: { routes: RouteDef[]; root: HTMLElement }) {
     this._routes = routes;
     this._root = root;
   }
@@ -23,9 +22,10 @@ class HashRouter {
     const parsedPath = this._removeHash(pathName);
     if (!this._checkRouteMatch(parsedPath)) return;
 
-    const pageTemplate = this._routes[this._routeMatch];
-    this._root.innerHTML = pageTemplate.render(this._params);
-    await pageTemplate.pageDidMount(this._params);
+    const pageOutlet = this._routes[this._routeMatchIdx];
+    const pageEl = document.createElement(pageOutlet.component);
+    this._root.innerHTML = "";
+    this._root.appendChild(pageEl);
   }
 
   private _checkRouteMatch(path: string) {
@@ -36,9 +36,8 @@ class HashRouter {
   private _matchRoute(urlPath: string) {
     const paramsMap = new Map();
 
-    const routes = Object.keys(this._routes);
-    const matchedRoute = routes.find((route) => {
-      const routeSegments = route
+    const matchedRouteIdx = this._routes.findIndex((route) => {
+      const routeSegments = route.path
         .split("/")
         .slice(1)
         .filter((r) => r !== "");
@@ -61,14 +60,14 @@ class HashRouter {
             paramsMap.set(segment.slice(1), urlSegments[idx]);
           }
         });
-        this._routeMatch = route;
         this._params = Object.fromEntries(paramsMap.entries());
         return true;
       }
       return false;
     });
 
-    return matchedRoute;
+    this._routeMatchIdx = matchedRouteIdx;
+    return matchedRouteIdx > -1;
   }
 
   // eslint-disable-next-line class-methods-use-this

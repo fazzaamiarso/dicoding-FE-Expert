@@ -22,7 +22,21 @@ class Detail {
     container.innerHTML = `
         <img src="${RestaurantAPI.buildImageURL(response.data.pictureId)}" alt="" />
         <h2>${response.data.name}</h2>
+        <p>${response.data.city}</p>
         <p>${response.data.description}</p>
+        <div>
+          <h3>Customer Reviews</h3>
+          <ul>
+            ${response.data.customerReviews
+              .map(
+                (review) => `<li>
+                  <h4>${review.name}</h4>
+                  <p>${review.review}</p>
+                </li>`
+              )
+              .join("\n")}
+          </ul>
+        </div>
     `;
   }
 }

@@ -33,6 +33,9 @@ const apiResponseSchema = z.object({
 
 const { BASE_URL, IMAGE_URL } = restaurantAPIConfig;
 
+export type Restaurant = z.infer<typeof restaurantSchema>;
+export type RestaurantWithDetail = z.infer<typeof restaurantDetailSchema>;
+
 class RestaurantAPI {
   static async getAll() {
     const response = await fetch(`${BASE_URL}/list`, { method: "GET" });

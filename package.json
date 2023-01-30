@@ -52,6 +52,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "dependencies": {
+    "lit": "^2.6.1",
     "regenerator-runtime": "^0.13.9",
     "zod": "^3.20.2"
   }

@@ -3,6 +3,7 @@ class Favorites {
     return `
         <div class="favorite">
             <h2>Favorite Restaurants</h2>
+            <restaurant-card></restaurant-card>
         </div>
     `;
   }

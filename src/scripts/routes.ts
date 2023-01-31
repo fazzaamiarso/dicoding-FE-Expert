@@ -13,26 +13,42 @@ type TempAny = any;
 class HashRouter {
   private _routes: RouteDef[];
 
-  private _root: HTMLElement;
+  private _outlet: HTMLElement;
 
   private _params: Record<string, string>;
 
   private _routeMatchIdx: number;
 
-  constructor({ routes, root }: { routes: RouteDef[]; root: HTMLElement }) {
-    this._routes = routes;
-    this._root = root;
+  constructor({ routes, outlet }: { routes?: RouteDef[]; outlet: HTMLElement }) {
+    this._routes = routes ?? [];
+    this._outlet = outlet;
+
+    if (this._routes.length) {
+      this._init();
+    }
   }
 
-  public async render(pathName: string) {
+  public render(pathName: string) {
     const parsedPath = this._removeHash(pathName);
     if (!this._checkRouteMatch(parsedPath)) return;
 
     const pageOutlet = this._routes[this._routeMatchIdx];
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
     pageEl.location = { params: this._params };
-    this._root.innerHTML = "";
-    this._root.appendChild(pageEl);
+    this._outlet.innerHTML = "";
+    this._outlet.appendChild(pageEl);
+  }
+
+  private _init() {
+    if (window === undefined)
+      throw new Error("Router can't be initialized because there's no Window");
+
+    ["DOMContentLoaded", "hashchange"].forEach((ev) => {
+      window.addEventListener(ev, () => {
+        const hashPath = window.location.hash || "#/";
+        this.render(hashPath);
+      });
+    });
   }
 
   private _checkRouteMatch(path: string) {
@@ -81,6 +97,12 @@ class HashRouter {
   private _removeHash(pathHash: string) {
     const parsedURL = pathHash.slice(1);
     return parsedURL;
+  }
+
+  public setRoutes(routes: RouteDef[]) {
+    this._routes = routes;
+    this._init();
+    return this;
   }
 }
 

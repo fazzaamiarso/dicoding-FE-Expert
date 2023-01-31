@@ -1,18 +1,30 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable import/extensions */
 /* eslint-disable max-classes-per-file */
-import { html, LitElement, nothing } from "lit";
+import { css, CSSResultGroup, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import RestaurantAPI, { RestaurantWithDetail } from "../api";
+import { RouteLocation } from "../routes";
 
 @customElement("detail-page")
 export default class DetailPage extends LitElement {
+  static styles?: CSSResultGroup = css`
+    .detail {
+      width: 90%;
+      margin-inline: auto;
+      max-width: 1200px;
+    }
+  `;
+
+  @property({ type: Object })
+  location: RouteLocation;
+
   @property({ type: Object })
   restaurant: RestaurantWithDetail;
 
   async connectedCallback() {
     super.connectedCallback();
-    const { params } = (this as any).location;
+    const { params } = this.location;
     const response = await RestaurantAPI.getById(params.id);
     this.restaurant = response.data;
   }

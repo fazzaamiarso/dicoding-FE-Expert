@@ -72,9 +72,3 @@ export default class RestaurantCard extends LitElement {
     `;
   }
 }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "restaurant-card": RestaurantCard;
-  }
-}

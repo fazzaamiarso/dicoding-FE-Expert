@@ -9,6 +9,7 @@ const router = new HashRouter({
   routes: [
     { path: "/", component: "home-page" },
     { path: "/favorites", component: "favorites-page" },
+    { path: "/restaurants/:id", component: "detail-page" },
   ],
   root: document.querySelector("main"),
 });

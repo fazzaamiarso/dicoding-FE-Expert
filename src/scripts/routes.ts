@@ -4,6 +4,10 @@ interface RouteDef {
   component?: string;
 }
 
+interface TemporaryEl extends HTMLElement {
+  location: Record<string, any>;
+}
+
 class HashRouter {
   private _routes: RouteDef[];
 
@@ -23,7 +27,8 @@ class HashRouter {
     if (!this._checkRouteMatch(parsedPath)) return;
 
     const pageOutlet = this._routes[this._routeMatchIdx];
-    const pageEl = document.createElement(pageOutlet.component);
+    const pageEl = document.createElement(pageOutlet.component) as TemporaryEl;
+    pageEl.location = { params: this._params };
     this._root.innerHTML = "";
     this._root.appendChild(pageEl);
   }

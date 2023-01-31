@@ -1,44 +1,42 @@
-import RestaurantAPI from "../api";
+/* eslint-disable class-methods-use-this */
+/* eslint-disable import/extensions */
+/* eslint-disable max-classes-per-file */
+import { html, LitElement, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import RestaurantAPI, { RestaurantWithDetail } from "../api";
 
-class Detail {
-  static render() {
-    return `
-        <div id="detail" class="detail">
-        </div>
-      `;
+@customElement("detail-page")
+export default class DetailPage extends LitElement {
+  @property({ type: Object })
+  restaurant: RestaurantWithDetail;
+
+  async connectedCallback() {
+    super.connectedCallback();
+    const { params } = (this as any).location;
+    const response = await RestaurantAPI.getById(params.id);
+    this.restaurant = response.data;
   }
 
-  static async pageDidMount(params: Record<string, any>) {
-    const container = document.querySelector("#detail");
-    const response = await RestaurantAPI.getById(params.id);
-
-    if (response.error) {
-      container.innerHTML = `
-        <p>${response.message}</p>
-      `;
-      return;
-    }
-
-    container.innerHTML = `
-        <img src="${RestaurantAPI.buildImageURL(response.data.pictureId)}" alt="" />
-        <h2>${response.data.name}</h2>
-        <p>${response.data.city}</p>
-        <p>${response.data.description}</p>
+  render() {
+    if (!this.restaurant) return nothing;
+    return html`
+      <div id="detail" class="detail">
+        <img src="${RestaurantAPI.buildImageURL(this.restaurant.pictureId)}" alt="" />
+        <h2>${this.restaurant.name}</h2>
+        <p>${this.restaurant.city}</p>
+        <p>${this.restaurant.description}</p>
         <div>
           <h3>Customer Reviews</h3>
           <ul>
-            ${response.data.customerReviews
-              .map(
-                (review) => `<li>
-                  <h4>${review.name}</h4>
-                  <p>${review.review}</p>
-                </li>`
-              )
-              .join("\n")}
+            ${this.restaurant.customerReviews.map(
+              (review) => html`<li>
+                <h4>${review.name}</h4>
+                <p>${review.review}</p>
+              </li>`
+            )}
           </ul>
         </div>
+      </div>
     `;
   }
 }
-
-export default Detail;

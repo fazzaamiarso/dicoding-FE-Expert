@@ -1,90 +1,196 @@
+/* eslint-disable import/extensions */
 /* eslint-disable no-underscore-dangle */
-import "./menu-drawer.style.scss";
+import { css, html, LitElement } from "lit";
+import { customElement, property, queryAll, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 
-class MenuDrawer extends HTMLElement {
-  private focusableEls: NodeListOf<HTMLElement>;
+@customElement("menu-drawer")
+class MenuDrawer extends LitElement {
+  static styles = css`
+    :host {
+      display: block;
+      position: fixed;
+      z-index: 1000;
+    }
+    @media screen and (min-width: 640px) {
+      :host {
+        display: none;
+      }
+    }
 
-  private firstFocusableEl: HTMLElement;
+    .menu__overlay {
+      --overlay-opacity: 0;
+      --overlay-scale: 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      transition: opacity 300ms ease;
 
-  private lastFocusableEl: HTMLElement;
+      opacity: var(--overlay-opacity);
+      transform: scale(var(--overlay-scale));
+    }
+    .menu__overlay.is-open {
+      --overlay-opacity: 1;
+      --overlay-scale: 1;
+    }
+    .menu {
+      --translateX: 100%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      transform: translateX(var(--translateX));
 
-  private isOpen: boolean;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
 
-  constructor() {
-    const drawerTemplate = document.querySelector("#menu-drawer-template") as HTMLTemplateElement;
+      width: 300px;
+      min-height: 100vh;
+      background-color: var(--text-indigo-50);
+      padding: 2rem;
+      transition: all 100ms ease-in;
+    }
+    .menu.is-open {
+      --translateX: 0%;
+    }
 
-    super();
+    .menu__close {
+      @extend .click-area;
+      display: block;
+      align-items: center;
 
-    this.appendChild(drawerTemplate.content.cloneNode(true));
+      background-color: transparent;
+      border: none;
+      margin-left: auto;
+    }
+    .menu__list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      row-gap: 2rem;
+    }
+    .menu__link {
+      @extend .click-area;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
 
-    this.focusableEls = this.querySelectorAll("a:not([disabled]), button:not([disabled])");
-    this.firstFocusableEl = this.focusableEls[0] as HTMLElement;
-    this.lastFocusableEl = this.focusableEls[this.focusableEls.length - 1] as HTMLElement;
+      color: var(--text-indigo-700);
+      font-weight: 600;
+      font-size: 1.4rem;
+      text-decoration: none;
+    }
+  `;
 
-    this.setAllTabIndex("-1");
+  @queryAll("a:not([disabled]), button:not([disabled])")
+  _focusableEls!: NodeListOf<HTMLElement>;
+
+  @state() _firstFocusableEl: HTMLElement;
+
+  @state() _lastFocusableEl: HTMLElement;
+
+  @property() open: boolean = false;
+
+  @property() triggerElement: HTMLElement;
+
+  // eslint-disable-next-line class-methods-use-this
+  protected render(): unknown {
+    return html`
+      <div id="overlay" class="menu__overlay"></div>
+      <div id="menu" class=${classMap({ menu: true, "is-open": this.open })}>
+        <button type="button" id="close-menu" class="menu__close" aria-label="close menu">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            style="width: 25px;"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <nav class="menu__nav">
+          <ul class="menu__list">
+            <li class="menu__item"><a class="menu__link" href="#/">Home</a></li>
+            <li class="menu__item"><a class="menu__link" href="#/favorites">Favorite</a></li>
+            <li class="menu__item">
+              <a class="menu__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    `;
   }
 
-  connectedCallback() {
-    const closeBtn = this.querySelector("#close-menu") as HTMLButtonElement;
-    const overlay = this.querySelector("#overlay") as HTMLButtonElement;
-    [overlay, closeBtn].forEach((el) => {
-      el.addEventListener("click", (e) => {
-        this.open = undefined;
-        e.preventDefault();
-        e.stopPropagation();
+  protected firstUpdated() {
+    this.setAllTabIndex("-1");
+    const closeBtn = this.renderRoot.querySelector("#close-menu") as HTMLButtonElement;
+    const overlay = this.renderRoot.querySelector("#overlay") as HTMLButtonElement;
+    const elements = [overlay, closeBtn];
+
+    elements.forEach((el) => {
+      el.addEventListener("click", async (e) => {
+        await this._closeDrawer(e);
       });
+    });
+    this.triggerElement.addEventListener("click", async (e) => {
+      await this._openDrawer(e);
     });
   }
 
-  get open() {
-    return String(this.hasAttribute("open"));
+  protected willUpdate(): void {
+    this._firstFocusableEl = this._focusableEls[0] as HTMLElement;
+    this._lastFocusableEl = this._focusableEls[this._focusableEls.length - 1] as HTMLElement;
   }
 
-  set open(val: string | undefined) {
-    if (val) {
-      this.setAttribute("open", "");
-      this.focusTrap();
-    } else {
-      this.removeAttribute("open");
-      this.cleanupFocusTrap();
-    }
-    this.isOpen = this.hasAttribute("open");
-    this.toggleStyle();
+  private async _closeDrawer(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.open = false;
+    await this.updateComplete;
+    this.cleanupFocusTrap();
   }
 
-  private toggleStyle() {
-    const isOpen = Boolean(this.isOpen);
-    const menuEl = this.querySelector("#menu") as HTMLElement;
-    const overlayEl = this.querySelector("#overlay") as HTMLElement;
+  private async _openDrawer(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
 
-    menuEl.style.transform = isOpen ? "translateX(0)" : "translateX(100%)";
-    overlayEl.style.opacity = isOpen ? "1" : "0";
-    overlayEl.style.transform = isOpen ? "scale(1)" : "scale(0)";
+    this.open = true;
+    await this.updateComplete;
+    this.focusTrap();
   }
 
   private handleEcape(e: KeyboardEvent) {
     if (!(e.key === "Esc" || e.key === "Escape")) return;
-    this.open = undefined;
+    this.open = false;
   }
 
   private handleFocusTrap(e: KeyboardEvent) {
-    const activeEl = document.activeElement;
+    if (!(this.renderRoot instanceof ShadowRoot)) return;
+    const activeEl = this.renderRoot.activeElement;
     const isTabPressed = e.key === "Tab";
     if (!isTabPressed) return;
 
-    if (e.shiftKey && activeEl === this.firstFocusableEl) {
-      this.lastFocusableEl.focus();
+    if (e.shiftKey && activeEl === this._firstFocusableEl) {
+      this._lastFocusableEl.focus();
       e.preventDefault();
     }
-    if (!e.shiftKey && activeEl === this.lastFocusableEl) {
-      this.firstFocusableEl.focus();
+    if (!e.shiftKey && activeEl === this._lastFocusableEl) {
+      this._firstFocusableEl.focus();
       e.preventDefault();
     }
   }
 
   private returnInitialFocus() {
-    const triggerEl = document.querySelector(`#${this.dataset.triggerId}`) as HTMLElement;
-    triggerEl.focus();
+    this.triggerElement.focus();
   }
 
   private cleanupFocusTrap() {
@@ -96,18 +202,16 @@ class MenuDrawer extends HTMLElement {
 
   private focusTrap() {
     this.setAllTabIndex("0");
-    this.firstFocusableEl.focus();
+    this._firstFocusableEl.focus();
     this.addEventListener("keydown", this.handleFocusTrap);
     this.addEventListener("keydown", this.handleEcape);
   }
 
   private setAllTabIndex(tabIndex: "0" | "1" | "-1") {
-    this.focusableEls.forEach((el) => {
+    this._focusableEls.forEach((el) => {
       el.setAttribute("tabindex", tabIndex ?? "-1");
     });
   }
 }
-
-customElements.define("menu-drawer", MenuDrawer);
 
 export default MenuDrawer;

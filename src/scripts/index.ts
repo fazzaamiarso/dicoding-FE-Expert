@@ -15,12 +15,7 @@ router.setRoutes([
   { path: "/restaurants/:id", component: "detail-page" },
 ]);
 
-window.addEventListener("DOMContentLoaded", async () => {
   const drawer = document.querySelector("#menu-drawer") as MenuDrawer;
   const menuButton = document.querySelector("#menu-button") as HTMLButtonElement;
 
-  menuButton.addEventListener("click", () => {
-    drawer.open = "true";
-    drawer.dataset.triggerId = menuButton.id;
-  });
-});
+  drawer.triggerElement = menuButton;

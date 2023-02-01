@@ -101,7 +101,12 @@ class MenuDrawer extends LitElement {
     return html`
       <div id="overlay" class="menu__overlay"></div>
       <div id="menu" class=${classMap({ menu: true, "is-open": this.open })}>
-        <button type="button" id="close-menu" class="menu__close" aria-label="close menu">
+        <button
+          type="button"
+          id="close-menu"
+          class="menu__close click-area"
+          aria-label="close menu"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -118,10 +123,14 @@ class MenuDrawer extends LitElement {
         </button>
         <nav class="menu__nav">
           <ul class="menu__list">
-            <li class="menu__item"><a class="menu__link" href="#/">Home</a></li>
-            <li class="menu__item"><a class="menu__link" href="#/favorites">Favorite</a></li>
+            <li class="menu__item"><a class="menu__link click-area" href="#/">Home</a></li>
             <li class="menu__item">
-              <a class="menu__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a>
+              <a class="menu__link click-area" href="#/favorites">Favorite</a>
+            </li>
+            <li class="menu__item">
+              <a class="menu__link click-area" href="https://www.fazzaamiarso.me" target="_blank"
+                >About Us</a
+              >
             </li>
           </ul>
         </nav>

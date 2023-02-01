@@ -1,7 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
 // eslint-disable-next-line max-classes-per-file
+import { Task } from "@lit-labs/task";
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
+import { utilClasses } from "../../styles/utils";
 import RestaurantAPI, { Restaurant } from "../api";
 
 const styles = css`
@@ -43,7 +46,7 @@ const styles = css`
     color: white;
   }
   .hero__text {
-    padding: 2rem 0.5rem;
+    padding: 1rem 0.5rem;
     background-image: radial-gradient(black, transparent 70%);
   }
   .hero__header {
@@ -82,7 +85,6 @@ const styles = css`
     gap: 2rem;
   }
   .hero__cta {
-    @extend .click-area;
     display: inline-flex;
     align-items: center;
 
@@ -92,12 +94,12 @@ const styles = css`
 
     font-size: var(--text-xs);
     font-weight: 600;
-    padding: 0.5rem 0.75rem;
+    padding: 0.1rem 0.75rem;
   }
   @media screen and (min-width: 768px) {
     .hero__cta {
       font-size: 1rem;
-      padding: 0.75rem 1rem;
+      padding: 0.25rem 1rem;
     }
   }
   .hero__cta:focus-visible {
@@ -112,7 +114,7 @@ const styles = css`
     gap: 0.25rem;
 
     box-shadow: var(--shadow-md);
-    border: var(--text-indigo-600 solid 1px);
+    border: var(--text-indigo-600) solid 1px;
     transition: all 200ms ease;
   }
   .hero__cta--primary:hover {
@@ -124,7 +126,7 @@ const styles = css`
 
   .hero__cta--secondary {
     color: var(--text-indigo-50);
-    border: var(--text-indigo-50 solid 1px);
+    border: var(--text-indigo-50) solid 1px;
     border-radius: var(--rounded-sm);
     transition: 200ms all ease;
   }
@@ -170,16 +172,9 @@ const styles = css`
 
 @customElement("home-page")
 export default class HomePage extends LitElement {
-  static styles = [styles];
+  static styles = [styles, utilClasses];
 
-  @property()
-  restaurants: Restaurant[] = [];
-
-  async connectedCallback() {
-    super.connectedCallback();
-    const response = await RestaurantAPI.getAll();
-    this.restaurants = response.data;
-  }
+  private _apiTask = new Task<any[], Restaurant[]>(this, RestaurantAPI.getAll, () => []);
 
   render() {
     return html`
@@ -195,7 +190,7 @@ export default class HomePage extends LitElement {
               </p>
             </div>
             <div class="hero__cta-group">
-              <a href="#explore" class="hero__cta hero__cta--primary"
+              <a href="#explore" class="hero__cta hero__cta--primary click-area"
                 ><span>Explore Now </span>
                 <svg
                   aria-hidden="true"
@@ -210,7 +205,7 @@ export default class HomePage extends LitElement {
                   />
                 </svg>
               </a>
-              <a href="#" class="hero__cta hero__cta--secondary">Learn more</a>
+              <a href="#" class="hero__cta hero__cta--secondary click-area">Learn more</a>
             </div>
           </div>
         </div>
@@ -218,9 +213,14 @@ export default class HomePage extends LitElement {
       <div id="explore" class="catalog">
         <h2 class="catalog__header">Explore Restaurants</h2>
         <ul id="catalog-list" class="catalog__list">
-          ${this.restaurants.map(
-            (restaurant) => html`<restaurant-card .restaurant=${restaurant}></restaurant-card>`
-          )}
+          ${this._apiTask.render({
+            complete: (restaurants) =>
+              restaurants.map(
+                (restaurant) => html`<restaurant-card .restaurant=${restaurant}></restaurant-card>`
+              ),
+            initial: () => html`<p>Nothing to see!</p>`,
+            pending: () => html`<p>I'm Loading Mann!</p>`,
+          })}
         </ul>
       </div>
     `;

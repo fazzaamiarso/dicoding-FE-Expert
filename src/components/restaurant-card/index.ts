@@ -3,29 +3,66 @@ import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Restaurant } from "../../scripts/api";
 import RestaurantAPI from "../../scripts/api";
+import { resetStyles } from "../../styles/reset";
 
 @customElement("restaurant-card")
 export default class RestaurantCard extends LitElement {
-  static styles = css`
-    .catalog__card {
-      max-width: 500px;
-    }
-    .catalog__star {
-      width: 18px;
-    }
-    .catalog__thumb {
-      position: relative;
-      height: 8rem;
-      overflow: hidden;
-      width: 100%;
-    }
-    .catalog__img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-  `;
+  static styles = [
+    resetStyles,
+    css`
+      .catalog__card {
+        max-width: 500px;
+        background-color: #0e1117;
+        border-radius: var(--rounded-md);
+      }
+      .catalog__content {
+        padding: 1rem;
+        color: var(--text-indigo-100);
+      }
+      .catalog__title {
+        color: var(--text-indigo-200);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+      .catalog__detail {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        font-size: var(--text-sm);
+      }
+      .catalog__rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .catalog__overlay {
+        position: absolute;
+        z-index: 10;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to top, rgb(19, 19, 21), transparent 80%);
+      }
+
+      .catalog__star {
+        fill: #facd15;
+        width: 18px;
+      }
+      .catalog__thumb {
+        position: relative;
+        height: 8rem;
+        overflow: hidden;
+        width: 100%;
+      }
+      .catalog__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    `,
+  ];
 
   @property()
   public restaurant: Restaurant;

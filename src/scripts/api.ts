@@ -43,10 +43,8 @@ class RestaurantAPI {
 
     const resultSchema = apiResponseSchema.extend({ restaurants: z.array(restaurantSchema) });
     const parsedResult = resultSchema.safeParse(result);
-    if (parsedResult.success) {
-      return { error: false, data: parsedResult.data.restaurants };
-    }
-    return { error: true, message: "It's an error. FIX it ASAP!" };
+    if (!parsedResult.success) throw Error("It's an error. FIX it ASAP!");
+    return parsedResult.data.restaurants;
   }
 
   static async getById(id: string) {
@@ -55,10 +53,8 @@ class RestaurantAPI {
 
     const resultSchema = apiResponseSchema.extend({ restaurant: restaurantDetailSchema });
     const parsedResult = resultSchema.safeParse(result);
-    if (parsedResult.success) {
-      return { error: false, data: parsedResult.data.restaurant };
-    }
-    return { error: true, message: "It's an error. FIX it ASAP!" };
+    if (!parsedResult.success) throw Error("It's an error. FIX it ASAP!");
+    return parsedResult.data.restaurant;
   }
 
   static buildImageURL(imageId: string, config?: { size?: "small" | "medium" | "large" }) {

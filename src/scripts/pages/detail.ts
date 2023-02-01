@@ -1,10 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable import/extensions */
 /* eslint-disable max-classes-per-file */
+import { Task } from "@lit-labs/task";
 import { css, CSSResultGroup, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import RestaurantAPI, { RestaurantWithDetail } from "../api";
-import { RouteLocation } from "../routes";
+import { RouteLocation } from "../router";
 
 @customElement("detail-page")
 export default class DetailPage extends LitElement {
@@ -16,31 +18,29 @@ export default class DetailPage extends LitElement {
     }
   `;
 
+  // INVESTIGATE IF THIS CAUSE WARNING
   @property({ type: Object })
   location: RouteLocation;
 
-  @property({ type: Object })
-  restaurant: RestaurantWithDetail;
-
-  async connectedCallback() {
-    super.connectedCallback();
-    const { params } = this.location;
-    const response = await RestaurantAPI.getById(params.id);
-    this.restaurant = response.data;
-  }
+  private _apiTask = new Task<[string], RestaurantWithDetail>(
+    this,
+    async ([restaurantId]) => RestaurantAPI.getById(restaurantId),
+    () => [this.location.params.id]
+  );
 
   render() {
-    if (!this.restaurant) return nothing;
-    return html`
-      <div id="detail" class="detail">
-        <img src="${RestaurantAPI.buildImageURL(this.restaurant.pictureId)}" alt="" />
-        <h2>${this.restaurant.name}</h2>
-        <p>${this.restaurant.city}</p>
-        <p>${this.restaurant.description}</p>
+    return this._apiTask.render({
+      initial: () => html`${nothing}`,
+      pending: () => html`<p>Loading Details</p>`,
+      complete: (restaurant) => html`<div id="detail" class="detail">
+        <img src="${RestaurantAPI.buildImageURL(restaurant.pictureId)}" alt="" />
+        <h2>${restaurant.name}</h2>
+        <p>${restaurant.city}</p>
+        <p>${restaurant.description}</p>
         <div>
           <h3>Customer Reviews</h3>
           <ul>
-            ${this.restaurant.customerReviews.map(
+            ${restaurant.customerReviews.map(
               (review) => html`<li>
                 <h4>${review.name}</h4>
                 <p>${review.review}</p>
@@ -48,7 +48,7 @@ export default class DetailPage extends LitElement {
             )}
           </ul>
         </div>
-      </div>
-    `;
+      </div>`,
+    });
   }
 }

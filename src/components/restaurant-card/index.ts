@@ -36,6 +36,12 @@ export default class RestaurantCard extends LitElement {
         align-items: center;
         gap: 0.25rem;
       }
+
+      .catalog__star {
+        fill: #facd15;
+        width: 18px;
+      }
+
       .catalog__overlay {
         position: absolute;
         z-index: 10;
@@ -45,10 +51,6 @@ export default class RestaurantCard extends LitElement {
         background-image: linear-gradient(to top, rgb(19, 19, 21), transparent 80%);
       }
 
-      .catalog__star {
-        fill: #facd15;
-        width: 18px;
-      }
       .catalog__thumb {
         position: relative;
         height: 8rem;

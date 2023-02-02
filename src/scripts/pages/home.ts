@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
 // eslint-disable-next-line max-classes-per-file
@@ -134,12 +135,14 @@ const styles = css`
     border-color: transparent;
   }
 
-  catalog__header {
+  .catalog__header {
     margin-bottom: 1.5rem;
     font-size: 1.25rem;
   }
   @media screen and (min-width: 648px) {
-    font-size: 1.5rem;
+    .catalog__header {
+      font-size: 1.5rem;
+    }
   }
 
   .catalog {

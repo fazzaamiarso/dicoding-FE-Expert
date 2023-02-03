@@ -4,7 +4,7 @@
 /* eslint-disable max-classes-per-file */
 import { Task } from "@lit-labs/task";
 import { css, CSSResultGroup, html, LitElement, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { resetStyles } from "../../styles/reset";
 import { utilClasses } from "../../styles/utils";
 import RestaurantAPI, { Restaurant, RestaurantWithDetail } from "../api";
@@ -77,6 +77,12 @@ export default class DetailPage extends LitElement {
   @property({ type: Object })
   location: RouteLocation;
 
+  @state() private _isFavorited = false;
+
+  async willUpdate() {
+    this._isFavorited = await this._getFavorited(this.location.params.id);
+  }
+
   private _apiTask = new Task<[string], RestaurantWithDetail>(
     this,
     async ([restaurantId]) => RestaurantAPI.getById(restaurantId),
@@ -84,7 +90,15 @@ export default class DetailPage extends LitElement {
   );
 
   private async _toggleFavorite(restaurant: Restaurant) {
-    await favoriteRestaurantDB.insertSingle(restaurant);
+    const isFavorited = await this._getFavorited(restaurant.id);
+    if (!isFavorited) await favoriteRestaurantDB.insertSingle(restaurant);
+    else await favoriteRestaurantDB.deleteSingle(restaurant.id);
+    this.requestUpdate();
+  }
+
+  private async _getFavorited(restaurantId: string) {
+    const isFavorited = Boolean(await favoriteRestaurantDB.getSingle(restaurantId));
+    return isFavorited;
   }
 
   render() {
@@ -110,7 +124,7 @@ export default class DetailPage extends LitElement {
                     class="detail__favorite"
                     @click="${() => this._toggleFavorite(restaurant)}"
                   >
-                    Favorite
+                    ${this._isFavorited ? "Remove from favorite" : "Add to favorite"}
                   </button>
                 </div>
                 <p>${restaurant.address}, ${restaurant.city}</p>

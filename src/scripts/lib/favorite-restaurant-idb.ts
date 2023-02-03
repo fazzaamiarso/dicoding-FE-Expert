@@ -38,6 +38,10 @@ class FavoriteRestaurantsDB {
     return (await this._dbPromise).get(RESTAURANT_STORE_NAME, restaurantId);
   }
 
+  public async deleteSingle(restaurantId: string) {
+    return (await this._dbPromise).delete(RESTAURANT_STORE_NAME, restaurantId);
+  }
+
   public async insertSingle(restaurant: Restaurant) {
     return (await this._dbPromise).add(RESTAURANT_STORE_NAME, restaurant);
   }

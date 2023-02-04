@@ -28,6 +28,10 @@ class HashRouter {
     }
   }
 
+  static back() {
+    window.history.back();
+  }
+
   public render(pathName: string) {
     const parsedPath = this._removeHash(pathName);
     if (!this._checkRouteMatch(parsedPath)) return;

@@ -50,4 +50,9 @@ export const resetStyles = css`
   #__next {
     isolation: isolate;
   }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
 `;

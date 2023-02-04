@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-underscore-dangle */
 import { css, html, LitElement } from "lit";
-import { customElement, property, queryAll, state } from "lit/decorators.js";
+import { customElement, property, queryAll } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 @customElement("menu-drawer")
@@ -88,9 +88,9 @@ class MenuDrawer extends LitElement {
   @queryAll("a:not([disabled]), button:not([disabled])")
   _focusableEls!: NodeListOf<HTMLElement>;
 
-  @state() _firstFocusableEl: HTMLElement;
+  private _firstFocusableEl: HTMLElement;
 
-  @state() _lastFocusableEl: HTMLElement;
+  private _lastFocusableEl: HTMLElement;
 
   @property() open: boolean = false;
 
@@ -99,13 +99,18 @@ class MenuDrawer extends LitElement {
   // eslint-disable-next-line class-methods-use-this
   protected render(): unknown {
     return html`
-      <div id="overlay" class="menu__overlay"></div>
+      <div
+        id="overlay"
+        class=${classMap({ menu__overlay: true, "is-open": this.open })}
+        @click="${this._closeDrawer}"
+      ></div>
       <div id="menu" class=${classMap({ menu: true, "is-open": this.open })}>
         <button
           type="button"
           id="close-menu"
           class="menu__close click-area"
           aria-label="close menu"
+          @click="${this._closeDrawer}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -140,15 +145,6 @@ class MenuDrawer extends LitElement {
 
   protected firstUpdated() {
     this.setAllTabIndex("-1");
-    const closeBtn = this.renderRoot.querySelector("#close-menu") as HTMLButtonElement;
-    const overlay = this.renderRoot.querySelector("#overlay") as HTMLButtonElement;
-    const elements = [overlay, closeBtn];
-
-    elements.forEach((el) => {
-      el.addEventListener("click", async (e) => {
-        await this._closeDrawer(e);
-      });
-    });
     this.triggerElement.addEventListener("click", async (e) => {
       await this._openDrawer(e);
     });

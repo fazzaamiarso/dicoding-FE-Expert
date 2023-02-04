@@ -5,6 +5,7 @@
 import { Task } from "@lit-labs/task";
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
+import { resetStyles } from "../../styles/reset";
 import { utilClasses } from "../../styles/utils";
 import RestaurantAPI, { Restaurant } from "../api";
 
@@ -145,16 +146,8 @@ const styles = css`
     }
   }
 
-  .catalog {
-    width: 90%;
-    margin-inline: auto;
-    max-width: 1200px;
-  }
   .catalog__list {
-    padding: 0;
     width: 100%;
-    list-style: none;
-
     display: grid;
     gap: 1.5rem;
   }
@@ -175,7 +168,7 @@ const styles = css`
 
 @customElement("home-page")
 export default class HomePage extends LitElement {
-  static styles = [styles, utilClasses];
+  static styles = [styles, resetStyles, utilClasses];
 
   private _apiTask = new Task<any[], Restaurant[]>(this, RestaurantAPI.getAll, () => []);
 
@@ -213,7 +206,7 @@ export default class HomePage extends LitElement {
           </div>
         </div>
       </div>
-      <div id="explore" class="catalog">
+      <div id="explore" class="catalog layout">
         <h2 class="catalog__header">Explore Restaurants</h2>
         <ul id="catalog-list" class="catalog__list">
           ${this._apiTask.render({

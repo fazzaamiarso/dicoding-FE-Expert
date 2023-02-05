@@ -1,10 +1,25 @@
 import { z } from "zod";
-import { restaurantAPIConfig } from "./constants";
+import { restaurantAPIConfig } from "@/constants";
 import {
   apiResponseSchema,
   restaurantSchema,
   restaurantDetailSchema,
 } from "@/types/restaurant-api";
+
+const indonesianMonths = [
+  "januari",
+  "februari",
+  "maret",
+  "april",
+  "mei",
+  "juni",
+  "juli",
+  "agustus",
+  "september",
+  "oktober",
+  "november",
+  "desember",
+];
 
 const { BASE_URL, IMAGE_URL } = restaurantAPIConfig;
 
@@ -32,6 +47,18 @@ class RestaurantAPI {
   static buildImageURL(imageId: string, config?: { size?: "small" | "medium" | "large" }) {
     const imageSize = config?.size || "small";
     return `${IMAGE_URL}/${imageSize}/${imageId}`;
+  }
+
+  static formatDateToNativeDate(date: string) {
+    const dateEntries: [string, number][] = Array.from(indonesianMonths, (v, k) => [v, k]);
+    const dateMap = new Map(dateEntries);
+
+    const splittedDate = date.split(" ");
+    const monthGetter = splittedDate[1].toLowerCase();
+    const month = dateMap.get(monthGetter) + 1;
+    const year = splittedDate[2];
+    const day = splittedDate[0];
+    return `${year}/${month}/${day}`;
   }
 }
 

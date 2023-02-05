@@ -4,7 +4,7 @@ import { carSVG, starSVG } from "@/assets/lit-svg";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
 import { Restaurant } from "@/types/restaurant-api";
-import RestaurantAPI from "@/api";
+import RestaurantAPI from "@/lib/restaurant-api";
 
 const newStyle = css`
   .catalog__card {

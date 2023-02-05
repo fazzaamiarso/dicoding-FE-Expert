@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import MenuDrawer from "./menu-drawer";
 import RestaurantCard from "./restaurant-card";
 
@@ -10,4 +9,3 @@ declare global {
     "menu-drawer": MenuDrawer;
   }
 }
-  

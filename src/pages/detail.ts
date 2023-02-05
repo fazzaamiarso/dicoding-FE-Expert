@@ -1,15 +1,11 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable import/extensions */
-/* eslint-disable max-classes-per-file */
 import { Task } from "@lit-labs/task";
 import { css, CSSResultGroup, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "../../assets/lit-svg";
-import { resetStyles } from "../../styles/reset";
-import { utilClasses } from "../../styles/utils";
+import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "@/assets/lit-svg";
+import { resetStyles } from "@/styles/reset";
+import { utilClasses } from "@/styles/utils";
 import RestaurantAPI, { Restaurant, RestaurantWithDetail } from "../api";
-import { favoriteRestaurantDB } from "../lib/favorite-restaurant-idb";
+import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 import HashRouter, { RouteLocation } from "../router";
 
 const months: [string, number][] = Array.from(
@@ -232,10 +228,6 @@ export default class DetailPage extends LitElement {
         padding: 1.25rem;
         background-color: #141e2f;
       }
-      .review__reviewer {
-      }
-      .review__content {
-      }
       .review__date {
         font-size: var(--text-sm);
       }
@@ -377,4 +369,3 @@ export default class DetailPage extends LitElement {
     `;
   }
 }
-

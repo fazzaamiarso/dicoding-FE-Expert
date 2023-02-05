@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 interface RouteDef {
   path: string;
   component?: string;

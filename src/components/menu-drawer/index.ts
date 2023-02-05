@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-/* eslint-disable no-underscore-dangle */
 import { css, html, LitElement } from "lit";
 import { customElement, property, queryAll } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";

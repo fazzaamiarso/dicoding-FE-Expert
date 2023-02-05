@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 import { Restaurant } from "../api";
 

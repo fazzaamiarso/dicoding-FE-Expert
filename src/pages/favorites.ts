@@ -1,12 +1,10 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable import/extensions */
 import { initialState, Task } from "@lit-labs/task";
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
-import { resetStyles } from "../../styles/reset";
-import { utilClasses } from "../../styles/utils";
+import { resetStyles } from "@/styles/reset";
+import { utilClasses } from "@/styles/utils";
 import { Restaurant } from "../api";
-import { favoriteRestaurantDB } from "../lib/favorite-restaurant-idb";
+import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 
 @customElement("favorites-page")
 export default class FavoritesPage extends LitElement {

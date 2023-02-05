@@ -1,12 +1,8 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable import/extensions */
-// eslint-disable-next-line max-classes-per-file
 import { Task } from "@lit-labs/task";
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { resetStyles } from "../../styles/reset";
-import { utilClasses } from "../../styles/utils";
+import { resetStyles } from "@/styles/reset";
+import { utilClasses } from "@/styles/utils";
 import RestaurantAPI, { Restaurant } from "../api";
 
 const styles = css`
@@ -178,7 +174,7 @@ export default class HomePage extends LitElement {
     return html`
       <div class="hero">
         <div class="hero__overlay"></div>
-        <img class="hero__img" src="./images/heros/hero-image_2.jpg" alt="" />
+        <img class="hero__img" src="images/heros/hero-image_2.jpg" alt="" />
         <div class="hero__content">
           <div class="hero__content--inner">
             <div class="hero__text">

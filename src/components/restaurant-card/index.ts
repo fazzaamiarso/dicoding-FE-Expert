@@ -1,12 +1,10 @@
-/* eslint-disable no-underscore-dangle */
 import { css, html, LitElement } from "lit";
-// eslint-disable-next-line import/extensions
 import { customElement, property } from "lit/decorators.js";
-import { starSVG } from "../../assets/lit-svg";
-import type { Restaurant } from "../../scripts/api";
-import RestaurantAPI from "../../scripts/api";
-import { resetStyles } from "../../styles/reset";
-import { utilClasses } from "../../styles/utils";
+import { starSVG } from "@/assets/lit-svg";
+import type { Restaurant } from "../../api";
+import RestaurantAPI from "../../api";
+import { resetStyles } from "@/styles/reset";
+import { utilClasses } from "@/styles/utils";
 
 const newStyle = css`
   .catalog__card {

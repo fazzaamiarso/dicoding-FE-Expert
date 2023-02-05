@@ -1,40 +1,12 @@
 import { z } from "zod";
 import { restaurantAPIConfig } from "./constants";
-
-const restaurantSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  pictureId: z.string(),
-  city: z.string(),
-  rating: z.number(),
-});
-
-const reviewSchema = z.object({
-  name: z.string(),
-  review: z.string(),
-  date: z.string(),
-});
-
-const restaurantDetailSchema = restaurantSchema.extend({
-  address: z.string(),
-  categories: z.array(z.object({ name: z.string() })),
-  menus: z.object({
-    foods: z.array(z.object({ name: z.string() })),
-    drinks: z.array(z.object({ name: z.string() })),
-  }),
-  customerReviews: z.array(reviewSchema),
-});
-
-const apiResponseSchema = z.object({
-  error: z.boolean(),
-  message: z.string(),
-});
+import {
+  apiResponseSchema,
+  restaurantSchema,
+  restaurantDetailSchema,
+} from "@/types/restaurant-api";
 
 const { BASE_URL, IMAGE_URL } = restaurantAPIConfig;
-
-export type Restaurant = z.infer<typeof restaurantSchema>;
-export type RestaurantWithDetail = z.infer<typeof restaurantDetailSchema>;
 
 class RestaurantAPI {
   static async getAll() {

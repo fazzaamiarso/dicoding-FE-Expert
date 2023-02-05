@@ -3,8 +3,8 @@ import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
-import { Restaurant } from "../api";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
+import { Restaurant } from "@/types/restaurant-api";
 
 @customElement("favorites-page")
 export default class FavoritesPage extends LitElement {

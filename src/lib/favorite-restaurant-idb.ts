@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
-import { Restaurant } from "../api";
+import { Restaurant } from "@/types/restaurant-api";
 
 const DATABASE_NAME = "favorite-restaurants";
 const RESTAURANT_STORE_NAME = "restaurants";
@@ -16,7 +16,6 @@ class FavoriteRestaurantsDB {
 
   constructor() {
     if (!("indexedDB" in window)) {
-      // eslint-disable-next-line no-console
       console.log("This browser doesn't support IndexedDB.");
       return;
     }
@@ -50,5 +49,4 @@ class FavoriteRestaurantsDB {
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const favoriteRestaurantDB = new FavoriteRestaurantsDB();

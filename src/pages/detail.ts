@@ -4,9 +4,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "@/assets/lit-svg";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
-import RestaurantAPI, { Restaurant, RestaurantWithDetail } from "../api";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
-import HashRouter, { RouteLocation } from "../router";
+import HashRouter from "@/router";
+import { Restaurant, RestaurantWithDetail } from "@/types/restaurant-api";
+import RestaurantAPI from "@/api";
+import { RouteLocation } from "@/types/router";
 
 const months: [string, number][] = Array.from(
   [

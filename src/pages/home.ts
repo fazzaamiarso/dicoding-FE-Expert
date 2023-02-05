@@ -3,7 +3,8 @@ import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
-import RestaurantAPI, { Restaurant } from "../api";
+import RestaurantAPI from "@/api";
+import { Restaurant } from "@/types/restaurant-api";
 
 const styles = css`
   .hero {

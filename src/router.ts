@@ -1,11 +1,4 @@
-interface RouteDef {
-  path: string;
-  component?: string;
-}
-
-export interface RouteLocation {
-  params: Record<string, string>;
-}
+import { RouteDef } from "@/types/router";
 
 type TempAny = any;
 
@@ -96,7 +89,6 @@ class HashRouter {
     return matchedRouteIdx > -1;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private _removeHash(pathHash: string) {
     const parsedURL = pathHash.slice(1);
     return parsedURL;

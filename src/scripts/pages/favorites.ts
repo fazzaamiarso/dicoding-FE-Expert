@@ -10,7 +10,32 @@ import { favoriteRestaurantDB } from "../lib/favorite-restaurant-idb";
 
 @customElement("favorites-page")
 export default class FavoritesPage extends LitElement {
-  static styles = [resetStyles, utilClasses, css``];
+  static styles = [
+    resetStyles,
+    utilClasses,
+    css`
+      .favorite__list {
+        --row-gap: 1.5rem;
+        --column-gap: 1.75rem;
+        width: 100%;
+        display: grid;
+        row-gap: var(--row-gap);
+        column-gap: var(--column-gap);
+      }
+      @media screen and (min-width: 648px) {
+        .favorite__list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media screen and (min-width: 1024px) {
+        .favorite__list {
+          --column-gap: 1.5rem;
+          --row-gap: 1.5rem;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+    `,
+  ];
 
   private _apiTask = new Task<any[], Restaurant[]>(
     this,

@@ -147,20 +147,22 @@ const styles = css`
   }
 
   .catalog__list {
+    --row-gap: 1.5rem;
+    --column-gap: 1.75rem;
     width: 100%;
     display: grid;
-    gap: 1.5rem;
+    row-gap: var(--row-gap);
+    column-gap: var(--column-gap);
   }
   @media screen and (min-width: 648px) {
     .catalog__list {
-      column-gap: 2.25rem;
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   @media screen and (min-width: 1024px) {
     .catalog__list {
-      column-gap: 2.75rem;
-      row-gap: 2.25rem;
+      --column-gap: 1.5rem;
+      --row-gap: 1.5rem;
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }

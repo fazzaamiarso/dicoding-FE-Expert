@@ -5,11 +5,11 @@ import webpack from "webpack";
 import ESLintWebpackPlugin from "eslint-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import WorkboxWebpackPlugin from "workbox-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: {
     app: path.resolve(__dirname, "src/index.ts"),
-    // sw: path.resolve(__dirname, 'src/scripts/sw.js'),
   },
   resolve: {
     plugins: [new TsconfigPathsPlugin()],
@@ -18,7 +18,7 @@ const config: webpack.Configuration = {
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/public/",
+    publicPath: "/",
     clean: true,
   },
   module: {
@@ -55,6 +55,9 @@ const config: webpack.Configuration = {
     }),
     new ESLintWebpackPlugin(),
     new MiniCssExtractPlugin(),
+    new WorkboxWebpackPlugin.GenerateSW({
+      swDest: "./sw.bundle.js",
+    }),
   ],
 };
 

@@ -13,7 +13,7 @@ const devServer: DevServerConfiguration = {
       warnings: true,
     },
   },
-  hot: true,
+  hot: false,
   compress: true,
 };
 

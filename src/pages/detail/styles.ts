@@ -142,7 +142,10 @@ export const detailStyles = css`
     flex-direction: column;
     gap: 0.5rem;
   }
-
+  .review__input-container {
+    display: grid;
+    margin-bottom: 1rem;
+  }
   .review__textarea {
     resize: vertical;
   }

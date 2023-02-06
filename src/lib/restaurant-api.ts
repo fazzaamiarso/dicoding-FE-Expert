@@ -4,6 +4,7 @@ import {
   apiResponseSchema,
   restaurantSchema,
   restaurantDetailSchema,
+  AddReviewInput,
 } from "@/types/restaurant-api";
 
 const indonesianMonths = [
@@ -21,7 +22,7 @@ const indonesianMonths = [
   "desember",
 ];
 
-const { BASE_URL, IMAGE_URL } = restaurantAPIConfig;
+const { BASE_URL, IMAGE_URL, POST_REVIEW_URL } = restaurantAPIConfig;
 
 class RestaurantAPI {
   static async getAll() {
@@ -42,6 +43,18 @@ class RestaurantAPI {
     const parsedResult = resultSchema.safeParse(result);
     if (!parsedResult.success) throw Error("It's an error. FIX it ASAP!");
     return parsedResult.data.restaurant;
+  }
+
+  static async postSingleReview({ id, name, review }: AddReviewInput) {
+    const fetchConfig: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, name, review }),
+    };
+
+    const response = await fetch(POST_REVIEW_URL, fetchConfig);
+
+    console.log(await response.json());
   }
 
   static buildImageURL(imageId: string, config?: { size?: "small" | "medium" | "large" }) {

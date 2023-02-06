@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const withId = z.object({ id: z.string() });
+
 export const restaurantSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -14,6 +16,8 @@ export const reviewSchema = z.object({
   review: z.string(),
   date: z.string(),
 });
+
+const addReviewSchema = reviewSchema.omit({ date: true }).merge(withId);
 
 export const restaurantDetailSchema = restaurantSchema.extend({
   address: z.string(),
@@ -32,3 +36,4 @@ export const apiResponseSchema = z.object({
 
 export type Restaurant = z.infer<typeof restaurantSchema>;
 export type RestaurantWithDetail = z.infer<typeof restaurantDetailSchema>;
+export type AddReviewInput = z.infer<typeof addReviewSchema>;

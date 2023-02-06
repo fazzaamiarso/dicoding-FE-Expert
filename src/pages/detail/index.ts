@@ -44,11 +44,14 @@ export default class DetailPage extends LitElement {
     return isFavorited;
   }
 
+  // TODO: imlement input validation and sanitazion
   private async _submitHandler(e: SubmitEvent) {
     e.preventDefault();
     if (!(e.currentTarget instanceof HTMLFormElement)) return;
     const formData = new FormData(e.currentTarget);
-    console.log(formData.get("review"));
+    const name = formData.get("customer-name") as string;
+    const review = formData.get("customer-review") as string;
+    await RestaurantAPI.postSingleReview({ name, review, id: this.location.params.id });
   }
 
   render() {
@@ -119,14 +122,20 @@ export default class DetailPage extends LitElement {
               <div class="review">
                 <h3 class="review__title">Customer Reviews</h3>
                 <form @submit="${this._submitHandler}" class="review__form">
-                  <label for="customer-review">Add a review</label>
-                  <textarea
-                    class="review__textarea"
-                    id="customer-review"
-                    name="review"
-                    rows="${3}"
-                    placeholder="What are your thoughts about this restaurant?"
-                  ></textarea>
+                  <div class="review__input-container">
+                    <label for="customer-name">Name</label>
+                    <input id="customer-name" name="customer-name" type="text" />
+                  </div>
+                  <div class="review__input-container">
+                    <label for="customer-review">Write your review</label>
+                    <textarea
+                      class="review__textarea"
+                      id="customer-review"
+                      name="customer-review"
+                      rows="${0}"
+                      placeholder="What are your thoughts about this restaurant?"
+                    ></textarea>
+                  </div>
                   <button class="review__submit">Submit</button>
                 </form>
                 <ul class="review__list">

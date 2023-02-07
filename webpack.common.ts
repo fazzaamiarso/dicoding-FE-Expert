@@ -5,7 +5,6 @@ import webpack from "webpack";
 import ESLintWebpackPlugin from "eslint-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import WorkboxWebpackPlugin from "workbox-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: {
@@ -55,9 +54,6 @@ const config: webpack.Configuration = {
     }),
     new ESLintWebpackPlugin(),
     new MiniCssExtractPlugin(),
-    new WorkboxWebpackPlugin.GenerateSW({
-      swDest: "./sw.bundle.js",
-    }),
   ],
 };
 

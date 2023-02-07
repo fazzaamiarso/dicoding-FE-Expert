@@ -18,6 +18,4 @@ router.setRoutes([
 const drawer = document.querySelector("menu-drawer");
 drawer.triggerElement = document.querySelector("#menu-button");
 
-window.addEventListener("load", async () => {
-  await registerSW();
-});
+registerSW();

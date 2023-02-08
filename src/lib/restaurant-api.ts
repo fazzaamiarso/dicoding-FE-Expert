@@ -36,7 +36,8 @@ class RestaurantAPI {
   }
 
   static async getById(id: string) {
-    const response = await fetch(`${BASE_URL}/detail/${id}`, { method: "GET" });
+    // Use no-cache because fetch cache the response when posting.
+    const response = await fetch(`${BASE_URL}/detail/${id}`, { method: "GET", cache: "no-cache" });
     const result = await response.json();
 
     const resultSchema = apiResponseSchema.extend({ restaurant: restaurantDetailSchema });
@@ -54,7 +55,6 @@ class RestaurantAPI {
 
     const response = await fetch(POST_REVIEW_URL, fetchConfig);
 
-    console.log(await response.json());
   }
 
   static buildImageURL(imageId: string, config?: { size?: "small" | "medium" | "large" }) {

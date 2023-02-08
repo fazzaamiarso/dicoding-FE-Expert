@@ -19,3 +19,4 @@ const drawer = document.querySelector("menu-drawer");
 drawer.triggerElement = document.querySelector("#menu-button");
 
 registerSW();
+

@@ -22,21 +22,20 @@ export default class DetailPage extends LitElement {
 
   @state() private _isFavorited = false;
 
-  async willUpdate() {
+  async firstUpdated() {
     this._isFavorited = await this._getFavorited(this.location.params.id);
   }
 
-  private _apiTask = new Task<[string], RestaurantWithDetail>(
-    this,
-    async ([restaurantId]) => RestaurantAPI.getById(restaurantId),
-    () => [this.location.params.id]
-  );
+  private _apiTask = new Task<string[], RestaurantWithDetail>(this, {
+    task: async ([restaurantId]) => RestaurantAPI.getById(restaurantId),
+    args: () => [this.location.params.id],
+  });
 
   private async _toggleFavorite(restaurant: Restaurant) {
     const isFavorited = await this._getFavorited(restaurant.id);
     if (!isFavorited) await favoriteRestaurantDB.insertSingle(restaurant);
     else await favoriteRestaurantDB.deleteSingle(restaurant.id);
-    this.requestUpdate();
+    this._isFavorited = !isFavorited;
   }
 
   private async _getFavorited(restaurantId: string) {
@@ -44,7 +43,7 @@ export default class DetailPage extends LitElement {
     return isFavorited;
   }
 
-  // TODO: imlement input validation and sanitazion
+  // TODO: implement input validation and sanitazion
   private async _submitHandler(e: SubmitEvent) {
     e.preventDefault();
     if (!(e.currentTarget instanceof HTMLFormElement)) return;
@@ -52,6 +51,7 @@ export default class DetailPage extends LitElement {
     const name = formData.get("customer-name") as string;
     const review = formData.get("customer-review") as string;
     await RestaurantAPI.postSingleReview({ name, review, id: this.location.params.id });
+    this._apiTask.run([this.location.params.id]);
   }
 
   render() {

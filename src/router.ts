@@ -2,6 +2,8 @@ import { RouteDef } from "@/types/router";
 
 type TempAny = any;
 
+const routeChange = new CustomEvent("route-change", { bubbles: true });
+
 class HashRouter {
   private _routes: RouteDef[];
 
@@ -10,6 +12,8 @@ class HashRouter {
   private _params: Record<string, string>;
 
   private _routeMatchIdx: number;
+
+  private _activeRoute: string;
 
   constructor({ routes, outlet }: { routes?: RouteDef[]; outlet: HTMLElement }) {
     this._routes = routes ?? [];
@@ -25,11 +29,11 @@ class HashRouter {
   }
 
   public render(pathName: string) {
-    const parsedPath = this._removeHash(pathName);
-    if (!this._checkRouteMatch(parsedPath)) return;
+    if (!this._checkRouteMatch(pathName)) return;
 
     const pageOutlet = this._routes[this._routeMatchIdx];
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
+    this._activeRoute = pageOutlet.path;
     pageEl.location = { params: this._params };
     this._outlet.innerHTML = "";
     this._outlet.appendChild(pageEl);
@@ -39,12 +43,30 @@ class HashRouter {
     if (window === undefined)
       throw new Error("Router can't be initialized because there's no Window");
 
-    ["DOMContentLoaded", "hashchange"].forEach((ev) => {
+    document.addEventListener("click", this._anchorClickHandler);
+
+    ["DOMContentLoaded", "route-change", "popstate"].forEach((ev) => {
       window.addEventListener(ev, () => {
-        const hashPath = window.location.hash || "#/";
-        this.render(hashPath);
+        const path = window.location.pathname || "/";
+        // prevent unnecessary re-render
+        if (this._activeRoute === path) return;
+        this.render(path);
       });
     });
+  }
+
+  /**
+   * Handle navigation triggered by anchor tag clicks
+   */
+  private _anchorClickHandler(e: Event) {
+    const clickTarget = e.composedPath()[0];
+    if (!(clickTarget instanceof HTMLAnchorElement)) return;
+    if (clickTarget.href.includes("#")) return;
+    if (clickTarget.getAttribute("target") === "_blank") return;
+    e.preventDefault();
+    e.stopPropagation();
+    window.history.pushState({}, "", clickTarget.pathname);
+    window.dispatchEvent(routeChange);
   }
 
   private _checkRouteMatch(path: string) {

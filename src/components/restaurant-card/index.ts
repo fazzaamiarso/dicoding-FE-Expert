@@ -113,7 +113,7 @@ export default class RestaurantCard extends LitElement {
               Free
             </span>
           </div>
-          <a href="#/restaurants/${this.restaurant.id}" class="catalog__link">See detail</a>
+          <a href="/restaurants/${this.restaurant.id}" class="catalog__link">See detail</a>
         </div>
       </li>
     `;

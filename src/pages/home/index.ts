@@ -14,6 +14,11 @@ export default class HomePage extends LitElement {
 
   private _apiTask = new Task<any[], Restaurant[]>(this, RestaurantAPI.getAll, () => []);
 
+  private _scrollIntoView(e: Event) {
+    if (!(e.target instanceof HTMLAnchorElement)) return;
+    this.renderRoot.querySelector(`${e.target.hash}`).scrollIntoView();
+  }
+
   render() {
     return html`
       <div class="hero">
@@ -28,7 +33,10 @@ export default class HomePage extends LitElement {
               </p>
             </div>
             <div class="hero__cta-group">
-              <a href="#explore" class="hero__cta hero__cta--primary click-area"
+              <a
+                href="#explore"
+                @click="${this._scrollIntoView}"
+                class="hero__cta hero__cta--primary click-area"
                 ><span>Explore Now </span>
                 ${arrowDownSVG()}
               </a>

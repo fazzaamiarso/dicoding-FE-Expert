@@ -8,19 +8,24 @@ import RestaurantAPI from "@/lib/restaurant-api";
 
 const newStyle = css`
   .catalog__card {
+    position: relative;
     max-width: 450px;
     border-radius: var(--rounded-md);
     background-color: #0f141d;
+    border: solid 2px transparent;
+    transition: all 300ms ease-in-out;
+  }
+  .catalog__card:is(:focus-within, :hover) {
+    border-color: var(--text-indigo-600);
   }
   .catalog__section {
     padding: 1rem;
   }
-
   .catalog__section.catalog__section--top {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    border-bottom: 0.25px darkgray solid;
+    border-bottom: 0.1px var(--text-indigo-900) solid;
   }
 
   .catalog__section.catalog__section--bottom {
@@ -63,7 +68,7 @@ const newStyle = css`
     gap: 0.35rem;
   }
   .catalog__parking svg {
-    color: #facd15;
+    color: var(--text-indigo-100);
     width: 16px;
   }
   .catalog__link {
@@ -71,6 +76,12 @@ const newStyle = css`
     text-decoration: none;
     color: var(--text-indigo-100);
     margin-left: auto;
+  }
+  .catalog__link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 5;
   }
 `;
 
@@ -113,7 +124,7 @@ export default class RestaurantCard extends LitElement {
               Free
             </span>
           </div>
-          <a href="/restaurants/${this.restaurant.id}" class="catalog__link">See detail</a>
+          <a href="/restaurants/${this.restaurant.id}" class="catalog__link"></a>
         </div>
       </li>
     `;

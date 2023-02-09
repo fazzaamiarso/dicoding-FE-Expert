@@ -4,7 +4,7 @@ type TempAny = any;
 
 const routeChange = new CustomEvent("route-change", { bubbles: true });
 
-class HashRouter {
+class HistoryRouter {
   private _routes: RouteDef[];
 
   private _outlet: HTMLElement;
@@ -33,7 +33,7 @@ class HashRouter {
 
     const pageOutlet = this._routes[this._routeMatchIdx];
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
-    this._activeRoute = pageOutlet.path;
+    this._activeRoute = pathName;
     pageEl.location = { params: this._params };
     this._outlet.innerHTML = "";
     this._outlet.appendChild(pageEl);
@@ -111,11 +111,6 @@ class HashRouter {
     return matchedRouteIdx > -1;
   }
 
-  private _removeHash(pathHash: string) {
-    const parsedURL = pathHash.slice(1);
-    return parsedURL;
-  }
-
   public setRoutes(routes: RouteDef[]) {
     this._routes = routes;
     this._init();
@@ -123,4 +118,4 @@ class HashRouter {
   }
 }
 
-export default HashRouter;
+export default HistoryRouter;

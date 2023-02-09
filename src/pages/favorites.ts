@@ -54,10 +54,19 @@ export default class FavoritesPage extends LitElement {
         <h2 class="favorite__title">Favorite Restaurants</h2>
         <ul class="favorite__list">
           ${this._apiTask.render({
-            initial: () => html`<p>Nothing to see here!</p>`,
             complete: (restaurants) =>
               restaurants.map(
-                (restaurant) => html`<restaurant-card .restaurant=${restaurant}></restaurant-card>`
+                (restaurant) => html`<li>
+                  <restaurant-card .restaurant=${restaurant}></restaurant-card>
+                </li>`
+              ),
+            initial: () =>
+              [...Array(9).keys()].map(
+                () => html`<restaurant-card ?loading=${true}></restaurant-card>`
+              ),
+            pending: () =>
+              [...Array(9).keys()].map(
+                () => html`<restaurant-card ?loading=${true}></restaurant-card>`
               ),
           })}
         </ul>

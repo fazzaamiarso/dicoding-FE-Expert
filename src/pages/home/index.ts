@@ -8,6 +8,7 @@ import { Restaurant } from "@/types/restaurant-api";
 import { arrowDownSVG } from "@/assets/lit-svg";
 import { homeStyles } from "./styles";
 
+
 @customElement("home-page")
 export default class HomePage extends LitElement {
   static styles = [resetStyles, utilClasses, homeStyles];
@@ -51,10 +52,18 @@ export default class HomePage extends LitElement {
           ${this._apiTask.render({
             complete: (restaurants) =>
               restaurants.map(
-                (restaurant) => html`<restaurant-card .restaurant=${restaurant}></restaurant-card>`
+                (restaurant) => html`<li>
+                  <restaurant-card .restaurant=${restaurant}></restaurant-card>
+                </li>`
               ),
-            initial: () => html`<p>Nothing to see!</p>`,
-            pending: () => html`<p>I'm Loading Mann!</p>`,
+            initial: () =>
+              [...Array(9).keys()].map(
+                () => html`<restaurant-card ?loading=${true}></restaurant-card>`
+              ),
+            pending: () =>
+              [...Array(9).keys()].map(
+                () => html`<restaurant-card ?loading=${true}></restaurant-card>`
+              ),
           })}
         </ul>
       </div>

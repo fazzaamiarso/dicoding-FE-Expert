@@ -83,23 +83,88 @@ const newStyle = css`
     inset: 0;
     z-index: 5;
   }
+
+  .loading__catalog {
+    padding: 1rem;
+    width: 100%;
+    min-height: 100px;
+    background-color: #0f141d;
+  }
+
+  .loading__content {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .loading__stack {
+    width: 100%;
+  }
+  .loading__block {
+    position: relative;
+    background-color: darkgray;
+    border-radius: var(--rounded-sm);
+    width: var(--block-w, 100%);
+    height: var(--block-h, 20px);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .loading__block.loading__block--img {
+    --block-w: 60px;
+    --block-h: 60px;
+  }
+  .loading__block.loading__block--title {
+    --block-h: 30px;
+    --block-w: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .loading__block.loading__block--text {
+    --block-h: 10px;
+    --block-w: 80%;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
 `;
+
+const catalogLoading = () => html`<div class="loading__catalog">
+  <div class="loading__content">
+    <div class="loading__block loading__block--img"></div>
+    <div class="loading__stack">
+      <div class="loading__block loading__block--title"></div>
+      <div class="loading__block loading__block--text"></div>
+    </div>
+  </div>
+  <div class="loading__block"></div>
+</div> `;
 
 @customElement("restaurant-card")
 export default class RestaurantCard extends LitElement {
   static styles = [resetStyles, utilClasses, newStyle];
 
-  @property()
+  @property({ type: Object })
   public restaurant: Restaurant;
+
+  @property({ type: Boolean })
+  public loading = false;
 
   private _formatRating(rating: number) {
     return new Intl.NumberFormat("en-US", { minimumFractionDigits: 1 }).format(rating);
   }
 
   protected render() {
+    if (this.loading) return catalogLoading();
     const rating = this._formatRating(this.restaurant.rating);
     return html`
-      <li class="catalog__card">
+      <div class="catalog__card">
         <div class="catalog__section catalog__section--top">
           <div class="catalog__thumb">
             <img
@@ -124,9 +189,13 @@ export default class RestaurantCard extends LitElement {
               Free
             </span>
           </div>
-          <a href="/restaurants/${this.restaurant.id}" class="catalog__link"></a>
+          <a href="/restaurants/${
+            this.restaurant.id
+          }" class="catalog__link"><span class="sr-only">see ${
+      this.restaurant.name
+    } detail</span></a>
         </div>
-      </li>
+      </div>
     `;
   }
 }

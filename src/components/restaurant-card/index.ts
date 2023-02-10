@@ -47,7 +47,7 @@ const newStyle = css`
     border-radius: var(--rounded-md);
   }
   .catalog__title {
-    color: var(--text-indigo-400);
+    color: #65dca2;
     font-size: 1rem;
   }
   .catalog__city {

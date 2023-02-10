@@ -2,10 +2,10 @@ import "regenerator-runtime"; /* for async await transpile */
 import "@/styles/main.scss";
 import "@/components";
 import "@/pages";
-import HashRouter from "./router";
+import HistoryRouter from "./router";
 import { registerSW } from "./utils/sw/register-sw";
 
-const router = new HashRouter({
+const router = new HistoryRouter({
   outlet: document.querySelector("main"),
 });
 

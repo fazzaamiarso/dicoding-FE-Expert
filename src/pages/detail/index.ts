@@ -82,14 +82,18 @@ export default class DetailPage extends LitElement {
               </div>
               <div class="detail__header--inner">
                 <div class="detail__header--content layout">
-                  <div class="detail__action">
-                    <button type="button" class="detail__back" @click="${HashRouter.back}">
+                  <div class="detail__actions">
+                    <button
+                      type="button"
+                      class="click-area detail__action detail__action--back"
+                      @click="${HashRouter.back}"
+                    >
                       ${arrowLongLeftSVG()}
                       <span class="sr-only">Go back</span>
                     </button>
                     <button
                       type="button"
-                      class="detail__favorite"
+                      class="click-area detail__action detail__action--favorite"
                       @click="${() => this._toggleFavorite(restaurant)}"
                     >
                       ${this._isFavorited ? heartFilledSVG() : heartSVG()}

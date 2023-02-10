@@ -7,32 +7,39 @@ export const detailStyles = css`
     gap: 2rem;
     overflow: hidden;
   }
-  .detail__action {
+  .detail__actions {
     width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
   }
-  .detail__back {
+  .detail__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     background-color: var(--bg-header);
     border-radius: var(--rounded-md);
     padding: 0.5rem;
+    outline: 2px solid transparent;
+    cursor: pointer;
+    transition: color 200ms ease-in-out;
   }
-  .detail__back svg {
+  .detail__action:hover,
+  .detail__action:focus-visible {
+    outline-color: #65dca2;
+    outline-offset: 1px;
+  }
+  .detail__action--back svg {
     color: var(--text-indigo-100);
     width: 25px;
   }
-  .detail__favorite {
+  .detail__action--favorite {
     margin-left: auto;
-    border: none;
-    background-color: var(--bg-header);
-    border-radius: var(--rounded-md);
-    padding: 0.5rem;
   }
-  .detail__favorite svg {
-    width: 25px;
+  .detail__action--favorite svg {
     color: red;
+    width: 25px;
   }
   .detail__overlay {
     position: absolute;
@@ -84,14 +91,13 @@ export const detailStyles = css`
     width: 18px;
   }
   .detail__category {
-    padding: 0;
-    list-style: none;
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
   }
   .detail__category-item {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     background-color: var(--bg-header);
     padding: 0.35rem;
     border-radius: var(--rounded-md);

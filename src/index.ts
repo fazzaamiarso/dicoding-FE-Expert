@@ -3,7 +3,7 @@ import "@/styles/main.scss";
 import "@/components";
 import "@/pages";
 import HashRouter from "./router";
-import { registerSW } from "./utils/register-sw";
+import { registerSW } from "./utils/sw/register-sw";
 
 const router = new HashRouter({
   outlet: document.querySelector("main"),

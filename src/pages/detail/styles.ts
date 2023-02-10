@@ -169,4 +169,58 @@ export const detailStyles = css`
     width: 40px;
     border-radius: var(--rounded-sm);
   }
+
+  .loading__catalog {
+    padding: 1rem;
+    width: 100%;
+    min-height: 100px;
+    background-color: #0f141d;
+  }
+
+  .loading__content {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .loading__stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .loading__stack.loading__stack--row {
+    flex-direction: row;
+  }
+  .loading__stack.loading__stack--md {
+    max-width: 500px;
+  }
+  .loading__block {
+    position: relative;
+    background-color: darkgray;
+    border-radius: var(--rounded-sm);
+    width: var(--block-w, 100%);
+    height: var(--block-h, 20px);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .loading__block.loading__block--title {
+    --block-h: 70px;
+    --block-w: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .loading__block.loading__block--text {
+    --block-h: 10px;
+    --block-w: 80%;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
 `;

@@ -1,5 +1,5 @@
 import { Task } from "@lit-labs/task";
-import { CSSResultGroup, html, LitElement, nothing } from "lit";
+import { CSSResultGroup, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "@/assets/lit-svg";
 import { resetStyles } from "@/styles/reset";
@@ -11,6 +11,16 @@ import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
 import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
+
+const detailLoading = () => html`
+  <div class="layout">
+    <div class="loading__stack loading__stack--md">
+      <div class="loading__block"></div>
+      <div class="loading__block loading__block--title"></div>
+      <div class="loading__block"></div>
+    </div>
+  </div>
+`;
 
 @customElement("detail-page")
 export default class DetailPage extends LitElement {
@@ -58,8 +68,8 @@ export default class DetailPage extends LitElement {
     return html`
       <div id="detail" class="detail">
         ${this._apiTask.render({
-          initial: () => html`${nothing}`,
-          pending: () => html`<p>Loading Details</p>`,
+          initial: () => detailLoading(),
+          pending: () => detailLoading(),
           complete: (restaurant) => html`
             <div class="detail__header">
               <div class="detail__thumb">

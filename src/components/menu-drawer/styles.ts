@@ -37,20 +37,22 @@ export const drawerStyles = css`
     right: 0;
     transform: translateX(var(--translateX));
 
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     min-height: 100vh;
     background-color: var(--text-indigo-50);
-    padding: 2rem;
     transition: all 100ms ease-in;
   }
   .menu.is-open {
     --translateX: 0%;
   }
 
+  .menu__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
+  }
   .menu__close {
     @extend .click-area;
     display: block;

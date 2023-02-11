@@ -26,40 +26,42 @@ class MenuDrawer extends LitElement {
         @click="${this._closeDrawer}"
       ></div>
       <div id="menu" class=${classMap({ menu: true, "is-open": this.open })}>
-        <button
-          type="button"
-          id="close-menu"
-          class="menu__close click-area"
-          aria-label="close menu"
-          @click="${this._closeDrawer}"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            style="width: 25px;"
-            aria-hidden="true"
+        <div class="menu__inner">
+          <button
+            type="button"
+            id="close-menu"
+            class="menu__close click-area"
+            aria-label="close menu"
+            @click="${this._closeDrawer}"
           >
-            <path
-              fill-rule="evenodd"
-              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <nav class="menu__nav">
-          <ul class="menu__list">
-            <li class="menu__item"><a class="menu__link click-area" href="#/">Home</a></li>
-            <li class="menu__item">
-              <a class="menu__link click-area" href="#/favorites">Favorite</a>
-            </li>
-            <li class="menu__item">
-              <a class="menu__link click-area" href="https://www.fazzaamiarso.me" target="_blank"
-                >About Us</a
-              >
-            </li>
-          </ul>
-        </nav>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style="width: 25px;"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <nav class="menu__nav">
+            <ul class="menu__list">
+              <li class="menu__item"><a class="menu__link click-area" href="#/">Home</a></li>
+              <li class="menu__item">
+                <a class="menu__link click-area" href="#/favorites">Favorite</a>
+              </li>
+              <li class="menu__item">
+                <a class="menu__link click-area" href="https://www.fazzaamiarso.me" target="_blank"
+                  >About Us</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     `;
   }

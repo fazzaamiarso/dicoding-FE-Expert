@@ -4,9 +4,10 @@ import "@/components";
 import "@/pages";
 import HistoryRouter from "./router";
 import { registerSW } from "./utils/sw/register-sw";
+import type { MenuDrawer } from "@/components";
 
 const router = new HistoryRouter({
-  outlet: document.querySelector("main"),
+  outlet: document.querySelector("main") as HTMLElement,
 });
 
 router.setRoutes([
@@ -15,8 +16,8 @@ router.setRoutes([
   { path: "/restaurants/:id", component: "detail-page" },
 ]);
 
-const drawer = document.querySelector("menu-drawer");
-drawer.triggerElement = document.querySelector("#menu-button");
+const drawer = document.querySelector("menu-drawer") as MenuDrawer;
+drawer.triggerElement = document.querySelector("#menu-button") as HTMLElement;
 
 registerSW();
 

@@ -12,10 +12,11 @@ interface FavoriteRestaurants extends DBSchema {
 }
 
 class FavoriteRestaurantsDB {
-  private _dbPromise: Promise<IDBPDatabase<FavoriteRestaurants>>;
+  private _dbPromise: Promise<IDBPDatabase<FavoriteRestaurants>> | undefined;
 
   constructor() {
     if (!("indexedDB" in window)) {
+      // eslint-disable-next-line no-console
       console.log("This browser doesn't support IndexedDB.");
       return;
     }
@@ -29,22 +30,27 @@ class FavoriteRestaurantsDB {
   }
 
   public async getAll() {
+    if (!this._dbPromise) return undefined;
     return (await this._dbPromise).getAll(RESTAURANT_STORE_NAME);
   }
 
   public async getSingle(restaurantId: string) {
+    if (!this._dbPromise) return undefined;
     return (await this._dbPromise).get(RESTAURANT_STORE_NAME, restaurantId);
   }
 
   public async deleteSingle(restaurantId: string) {
+    if (!this._dbPromise) return undefined;
     return (await this._dbPromise).delete(RESTAURANT_STORE_NAME, restaurantId);
   }
 
   public async insertSingle(restaurant: Restaurant) {
+    if (!this._dbPromise) return undefined;
     return (await this._dbPromise).add(RESTAURANT_STORE_NAME, restaurant);
   }
 
   public async updateSingle(restaurant: Restaurant) {
+    if (!this._dbPromise) return undefined;
     return (await this._dbPromise).put(RESTAURANT_STORE_NAME, restaurant);
   }
 }

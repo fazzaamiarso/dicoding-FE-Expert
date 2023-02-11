@@ -17,7 +17,7 @@ export default class HomePage extends LitElement {
 
   private _scrollIntoView(e: Event) {
     if (!(e.target instanceof HTMLAnchorElement)) return;
-    this.renderRoot.querySelector(`${e.target.hash}`).scrollIntoView();
+    this.renderRoot.querySelector(`${e.target.hash}`)?.scrollIntoView();
   }
 
   render() {

@@ -9,11 +9,11 @@ class HistoryRouter {
 
   private _outlet: HTMLElement;
 
-  private _params: Record<string, string>;
+  private _params: Record<string, string> = {};
 
-  private _routeMatchIdx: number;
+  private _routeMatchIdx: number = -1;
 
-  private _activeRoute: string;
+  private _activeRoute: string = "";
 
   constructor({ routes, outlet }: { routes?: RouteDef[]; outlet: HTMLElement }) {
     this._routes = routes ?? [];
@@ -32,6 +32,7 @@ class HistoryRouter {
     if (!this._checkRouteMatch(pathName)) return;
 
     const pageOutlet = this._routes[this._routeMatchIdx];
+    if (!pageOutlet.component) return;
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
     this._activeRoute = pathName;
     pageEl.location = { params: this._params };

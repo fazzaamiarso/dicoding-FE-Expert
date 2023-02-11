@@ -10,13 +10,13 @@ class MenuDrawer extends LitElement {
   @queryAll("a:not([disabled]), button:not([disabled])")
   _focusableEls!: NodeListOf<HTMLElement>;
 
-  private _firstFocusableEl: HTMLElement;
+  private _firstFocusableEl!: HTMLElement;
 
-  private _lastFocusableEl: HTMLElement;
+  private _lastFocusableEl!: HTMLElement;
 
   @property() open: boolean = false;
 
-  @property() triggerElement: HTMLElement;
+  @property() triggerElement!: HTMLElement;
 
   protected render(): unknown {
     return html`

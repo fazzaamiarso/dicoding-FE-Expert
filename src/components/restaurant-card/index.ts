@@ -151,7 +151,7 @@ export default class RestaurantCard extends LitElement {
   static styles = [resetStyles, utilClasses, newStyle];
 
   @property({ type: Object })
-  public restaurant: Restaurant;
+  public restaurant!: Restaurant;
 
   @property({ type: Boolean })
   public loading = false;

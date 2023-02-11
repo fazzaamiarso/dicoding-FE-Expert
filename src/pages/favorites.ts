@@ -64,7 +64,7 @@ export default class FavoritesPage extends LitElement {
     async () => {
       try {
         const restaurants = await favoriteRestaurantDB.getAll();
-        return restaurants.length ? restaurants : initialState;
+        return restaurants && restaurants.length ? restaurants : initialState;
       } catch (e) {
         throw Error("Godamn!");
       }

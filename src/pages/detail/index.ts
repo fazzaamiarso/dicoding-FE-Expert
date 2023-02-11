@@ -28,7 +28,7 @@ export default class DetailPage extends LitElement {
 
   // INVESTIGATE IF THIS CAUSE WARNING
   @property({ type: Object })
-  location: RouteLocation;
+  location!: RouteLocation;
 
   @state() private _isFavorited = false;
 

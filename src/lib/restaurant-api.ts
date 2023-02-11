@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { z } from "zod";
 import { restaurantAPIConfig } from "@/constants";
 import {
@@ -31,18 +32,38 @@ class RestaurantAPI {
 
     const resultSchema = apiResponseSchema.extend({ restaurants: z.array(restaurantSchema) });
     const parsedResult = resultSchema.safeParse(result);
-    if (!parsedResult.success) throw Error("It's an error. FIX it ASAP!");
+
+    if (!parsedResult.success) {
+      console.error(parsedResult.error.flatten);
+      throw new Error("Bad request payload!");
+    }
+
+    if (parsedResult.data.error) {
+      console.error(parsedResult.data.message);
+      throw new Error("Something went wrong!");
+    }
+
     return parsedResult.data.restaurants;
   }
 
   static async getById(id: string) {
-    // Use no-cache because fetch cache the response when posting.
+    // Use no-cache because fetch cache the response when posting, unabling to refetch on page reload.
     const response = await fetch(`${BASE_URL}/detail/${id}`, { method: "GET", cache: "no-cache" });
     const result = await response.json();
 
     const resultSchema = apiResponseSchema.extend({ restaurant: restaurantDetailSchema });
     const parsedResult = resultSchema.safeParse(result);
-    if (!parsedResult.success) throw Error("It's an error. FIX it ASAP!");
+
+    if (!parsedResult.success) {
+      console.error(parsedResult.error.flatten);
+      throw new Error("Bad request payload!");
+    }
+
+    if (parsedResult.data.error) {
+      console.error(parsedResult.data.message);
+      throw new Error("Something went wrong!");
+    }
+
     return parsedResult.data.restaurant;
   }
 
@@ -54,7 +75,13 @@ class RestaurantAPI {
     };
 
     const response = await fetch(POST_REVIEW_URL, fetchConfig);
+    const result = await response.json();
+    const parsedResult = apiResponseSchema.safeParse(result);
 
+    if (!parsedResult.success) {
+      console.error(parsedResult.error.flatten);
+      throw new Error("Something went wrong!");
+    }
   }
 
   static buildImageURL(imageId: string, config?: { size?: "small" | "medium" | "large" }) {
@@ -68,7 +95,7 @@ class RestaurantAPI {
 
     const splittedDate = date.split(" ");
     const monthGetter = splittedDate[1].toLowerCase();
-    const month = dateMap.get(monthGetter) + 1;
+    const month = dateMap.get(monthGetter) || 0 + 1;
     const year = splittedDate[2];
     const day = splittedDate[0];
     return `${year}/${month}/${day}`;

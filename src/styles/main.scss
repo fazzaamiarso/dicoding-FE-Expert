@@ -1,3 +1,5 @@
+@import "./reset";
+
 // Variables mostly inspired from tailwind. https://tailwindcss.com/docs/
 :root {
   --font-primary: "Montserrat", sans-serif;
@@ -22,6 +24,8 @@
   --text-indigo-800: rgb(55 48 163);
   --text-indigo-900: rgb(49 46 129);
   
+  --logo-color: #65dca2;
+
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 

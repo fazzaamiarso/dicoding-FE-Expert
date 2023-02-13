@@ -20,10 +20,14 @@ export default class NavBar extends LitElement {
       <h1 class="navbar__title sr-only">Food Hunt</h1>
       <nav class="navbar__nav">
         <ul class="navbar__list">
-          <li class="navbar__item"><a class="navbar__link" href="/">Home</a></li>
-          <li class="navbar__item"><a class="navbar__link" href="/favorites">Favorite</a></li>
+          <li class="navbar__item"><a class="navbar__link click-area" href="/">Home</a></li>
           <li class="navbar__item">
-            <a class="navbar__link" href="https://www.fazzaamiarso.me" target="_blank">About Us</a>
+            <a class="navbar__link click-area" href="/favorites">Favorite</a>
+          </li>
+          <li class="navbar__item">
+            <a class="navbar__link click-area" href="https://www.fazzaamiarso.me" target="_blank"
+              >About Us</a
+            >
           </li>
         </ul>
       </nav>

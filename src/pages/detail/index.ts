@@ -13,6 +13,7 @@ import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
 import "toastify-js/src/toastify.css";
 import { featureSupportToast } from "@/lib/toast";
+import { formatRatingDisplay } from "@/utils/format-rating";
 
 const detailLoading = () => html`
   <div class="layout">
@@ -120,7 +121,8 @@ export default class DetailPage extends LitElement {
                   </ul>
                   <div>
                     <span class="detail__rating">
-                      ${starSVG()} ${restaurant.rating} (${restaurant.customerReviews.length})</span
+                      ${starSVG()} ${formatRatingDisplay(restaurant.rating)}
+                      (${restaurant.customerReviews.length})</span
                     >
                   </div>
                 </div>
@@ -160,7 +162,7 @@ export default class DetailPage extends LitElement {
                     ></textarea>
                   </div>
                   <button
-                    class="review__submit"
+                    class="review__submit click-area"
                     ?disabled=${favoriteRestaurantDB.checkIsSupported()}
                   >
                     Submit

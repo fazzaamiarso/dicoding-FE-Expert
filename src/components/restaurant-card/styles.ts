@@ -41,8 +41,9 @@ export const cardStyles = css`
     border-radius: var(--rounded-md);
   }
   .catalog__title {
-    color: #65dca2;
+    color: var(--logo-color);
     font-size: 1rem;
+    font-weight: 600;
   }
   .catalog__city {
     font-size: var(--text-sm);

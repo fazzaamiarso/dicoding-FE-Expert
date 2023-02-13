@@ -29,7 +29,7 @@ export const favoriteStyles = css`
     padding: 0.5rem 0.7rem;
     font-weight: 600;
     color: black;
-    background-color: #65dca2;
+    background-color: var(--logo-color);
     border-radius: var(--rounded-sm);
     text-decoration: none;
   }

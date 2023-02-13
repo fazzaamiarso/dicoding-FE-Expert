@@ -25,7 +25,7 @@ export default class FavoritesPage extends LitElement {
       }
       .error__title {
         font-size: 1.75rem;
-        color: #65dca2;
+        color: var(--logo-color);
       }
     `,
   ];

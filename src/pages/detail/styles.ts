@@ -27,7 +27,7 @@ export const detailStyles = css`
   }
   .detail__action:hover,
   .detail__action:focus-visible {
-    outline-color: #65dca2;
+    outline-color: var(--logo-color);
     outline-offset: 1px;
   }
   .detail__action--back svg {
@@ -79,6 +79,7 @@ export const detailStyles = css`
   @media screen and (min-width: 640px) {
     .detail__name {
       font-size: 2.5rem;
+      color: var(--logo-color);
     }
   }
   .detail__rating {

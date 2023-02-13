@@ -6,6 +6,7 @@ import { utilClasses } from "@/styles/utils";
 import { Restaurant } from "@/types/restaurant-api";
 import RestaurantAPI from "@/lib/restaurant-api";
 import { cardStyles } from "./styles";
+import { formatRatingDisplay } from "@/utils/format-rating";
 
 const catalogLoading = () => html`<div class="loading__catalog">
   <div class="loading__content">
@@ -28,13 +29,9 @@ export default class RestaurantCard extends LitElement {
   @property({ type: Boolean })
   public loading = false;
 
-  private _formatRating(rating: number) {
-    return new Intl.NumberFormat("en-US", { minimumFractionDigits: 1 }).format(rating);
-  }
-
   protected render() {
     if (this.loading) return catalogLoading();
-    const rating = this._formatRating(this.restaurant.rating);
+    const rating = formatRatingDisplay(this.restaurant.rating);
     return html`
       <div class="catalog__card">
         <div class="catalog__section catalog__section--top">

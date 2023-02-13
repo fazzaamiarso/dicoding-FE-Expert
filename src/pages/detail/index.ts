@@ -11,6 +11,8 @@ import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
 import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
+import "toastify-js/src/toastify.css";
+import { featureSupportToast } from "@/lib/toast";
 
 const detailLoading = () => html`
   <div class="layout">
@@ -42,6 +44,10 @@ export default class DetailPage extends LitElement {
   });
 
   private async _toggleFavorite(restaurant: Restaurant) {
+    if (!favoriteRestaurantDB.checkIsSupported()) {
+      featureSupportToast.showToast();
+      return;
+    }
     const isFavorited = await this._getFavorited(restaurant.id);
     if (!isFavorited) await favoriteRestaurantDB.insertSingle(restaurant);
     else await favoriteRestaurantDB.deleteSingle(restaurant.id);
@@ -49,8 +55,11 @@ export default class DetailPage extends LitElement {
   }
 
   private async _getFavorited(restaurantId: string) {
-    const isFavorited = Boolean(await favoriteRestaurantDB.getSingle(restaurantId));
-    return isFavorited;
+    try {
+      return Boolean(await favoriteRestaurantDB.getSingle(restaurantId));
+    } catch {
+      return false;
+    }
   }
 
   // TODO: implement input validation and sanitazion
@@ -150,7 +159,12 @@ export default class DetailPage extends LitElement {
                       placeholder="What are your thoughts about this restaurant?"
                     ></textarea>
                   </div>
-                  <button class="review__submit">Submit</button>
+                  <button
+                    class="review__submit"
+                    ?disabled=${favoriteRestaurantDB.checkIsSupported()}
+                  >
+                    Submit
+                  </button>
                 </form>
                 <ul class="review__list">
                   ${restaurant.customerReviews.map((review) =>

@@ -17,7 +17,7 @@ export const reviewSchema = z.object({
   date: z.string(),
 });
 
-const addReviewSchema = reviewSchema.omit({ date: true }).merge(withId);
+export const addReviewSchema = reviewSchema.omit({ date: true }).merge(withId);
 
 export const restaurantDetailSchema = restaurantSchema.extend({
   address: z.string(),

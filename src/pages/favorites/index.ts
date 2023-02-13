@@ -5,56 +5,27 @@ import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 import { Restaurant } from "@/types/restaurant-api";
+import { favoriteStyles } from "./styles";
 
 @customElement("favorites-page")
 export default class FavoritesPage extends LitElement {
   static styles = [
     resetStyles,
     utilClasses,
+    favoriteStyles,
     css`
-      .favorite__list {
-        --row-gap: 1.5rem;
-        --column-gap: 1.75rem;
-        width: 100%;
-        display: grid;
-        row-gap: var(--row-gap);
-        column-gap: var(--column-gap);
-      }
-      .favorite__empty {
-        width: 100%;
+      .error__container {
         padding-block: 5rem;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1.25rem;
+        gap: 0.5rem;
         text-align: center;
       }
-      .favorite__empty-title {
-        font-size: 2rem;
-        color: var(--text-indigo-300);
-      }
-      .favorite__empty-cta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0.5rem 0.7rem;
-        font-weight: 600;
-        color: black;
-        background-color: #65dca2;
-        border-radius: var(--rounded-sm);
-        text-decoration: none;
-      }
-      @media screen and (min-width: 648px) {
-        .favorite__list {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-      @media screen and (min-width: 1024px) {
-        .favorite__list {
-          --column-gap: 1.5rem;
-          --row-gap: 1.5rem;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
+      .error__title {
+        font-size: 1.75rem;
+        color: #65dca2;
       }
     `,
   ];
@@ -65,8 +36,9 @@ export default class FavoritesPage extends LitElement {
       try {
         const restaurants = await favoriteRestaurantDB.getAll();
         return restaurants && restaurants.length ? restaurants : initialState;
-      } catch (e) {
-        throw Error("Godamn!");
+      } catch (e: unknown) {
+        if (e instanceof Error) throw new Error(e.message);
+        throw new Error("Something went wrong!");
       }
     },
     () => []
@@ -94,6 +66,12 @@ export default class FavoritesPage extends LitElement {
               <h3 class="favorite__empty-title">Looks like you don't have any favorites yet!</h3>
               <p>Get Started by exploring our restaurant list</p>
               <a href="/" class="favorite__empty-cta click-area">See restaurants</a>
+            </div>
+          `,
+          error: (e: any) => html`
+            <div class="error__container">
+              <h3 class="error__title">We're unable to get your request!</h3>
+              <p class="error__message">${e?.message || "Something went wrong!"}</p>
             </div>
           `,
         })}

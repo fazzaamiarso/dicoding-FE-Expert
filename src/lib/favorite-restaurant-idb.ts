@@ -29,28 +29,32 @@ class FavoriteRestaurantsDB {
     });
   }
 
+  public checkIsSupported() {
+    return "indexedDB" in window;
+  }
+
   public async getAll() {
-    if (!this._dbPromise) return undefined;
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).getAll(RESTAURANT_STORE_NAME);
   }
 
   public async getSingle(restaurantId: string) {
-    if (!this._dbPromise) return undefined;
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).get(RESTAURANT_STORE_NAME, restaurantId);
   }
 
   public async deleteSingle(restaurantId: string) {
-    if (!this._dbPromise) return undefined;
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).delete(RESTAURANT_STORE_NAME, restaurantId);
   }
 
   public async insertSingle(restaurant: Restaurant) {
-    if (!this._dbPromise) return undefined;
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).add(RESTAURANT_STORE_NAME, restaurant);
   }
 
   public async updateSingle(restaurant: Restaurant) {
-    if (!this._dbPromise) return undefined;
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).put(RESTAURANT_STORE_NAME, restaurant);
   }
 }

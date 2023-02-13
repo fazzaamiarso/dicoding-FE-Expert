@@ -155,7 +155,6 @@ export const detailStyles = css`
   .review__textarea {
     resize: vertical;
   }
-
   .review__list {
     display: grid;
     gap: 1.1rem;
@@ -175,7 +174,10 @@ export const detailStyles = css`
     width: 40px;
     border-radius: var(--rounded-sm);
   }
-
+  .review__submit {
+  }
+  .review__submit:disabled {
+  }
   .loading__catalog {
     padding: 1rem;
     width: 100%;

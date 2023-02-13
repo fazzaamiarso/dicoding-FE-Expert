@@ -64,6 +64,7 @@ export default class HomePage extends LitElement {
               [...Array(9).keys()].map(
                 () => html`<restaurant-card ?loading=${true}></restaurant-card>`
               ),
+            error: () => {},
           })}
         </ul>
       </div>

@@ -6,6 +6,7 @@ import {
   restaurantSchema,
   restaurantDetailSchema,
   AddReviewInput,
+  addReviewSchema,
 } from "@/types/restaurant-api";
 
 const indonesianMonths = [
@@ -68,10 +69,16 @@ class RestaurantAPI {
   }
 
   static async postSingleReview({ id, name, review }: AddReviewInput) {
+    const parsedInput = addReviewSchema.safeParse({ id, name, review });
+    if (!parsedInput.success) {
+      console.error(parsedInput.error.flatten);
+      throw new Error("Bad request payload!");
+    }
+
     const fetchConfig: RequestInit = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, name, review }),
+      body: JSON.stringify(parsedInput.data),
     };
 
     const response = await fetch(POST_REVIEW_URL, fetchConfig);

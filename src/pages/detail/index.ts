@@ -11,7 +11,6 @@ import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
 import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
-import "toastify-js/src/toastify.css";
 import { featureSupportToast } from "@/lib/toast";
 import { formatRatingDisplay } from "@/utils/format-rating";
 

@@ -44,7 +44,11 @@ class MenuDrawer extends LitElement {
                 <a class="menu__link click-area" href="/favorites">Favorite</a>
               </li>
               <li class="menu__item">
-                <a class="menu__link click-area" href="https://www.fazzaamiarso.me" target="_blank"
+                <a
+                  class="menu__link click-area"
+                  href="https://www.fazzaamiarso.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   >About Us</a
                 >
               </li>

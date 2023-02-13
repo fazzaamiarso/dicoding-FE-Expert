@@ -12,7 +12,12 @@ export default class FooterBar extends LitElement {
     return html` <footer class="footer">
       <ul class="footer__list">
         <li>
-          <a href="https://twitter.com/faz_razq" target="_blank" class="footer__link click-area">
+          <a
+            href="https://twitter.com/faz_razq"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer__link click-area"
+          >
             <span class="sr-only">Go to FoodHunt's twitter feed</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
@@ -22,7 +27,12 @@ export default class FooterBar extends LitElement {
           ></a>
         </li>
         <li>
-          <a href="https://github.com/fazzaamiarso" target="_blank" class="footer__link click-area">
+          <a
+            href="https://github.com/fazzaamiarso"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer__link click-area"
+          >
             <span class="sr-only">Go to FoodHunt's instagram feed</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
@@ -37,6 +47,7 @@ export default class FooterBar extends LitElement {
             href="https://www.linkedin.com/in/fazzaamiarso/"
             target="_blank"
             class="footer__link click-area"
+            rel="noopener noreferrer"
           >
             <span class="sr-only">Go to FoodHunt's facebook page</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

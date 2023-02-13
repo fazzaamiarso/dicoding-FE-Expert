@@ -5,7 +5,6 @@ import { css } from "lit";
   https://www.joshwcomeau.com/css/custom-css-reset/
 */
 
-// eslint-disable-next-line import/prefer-default-export
 export const resetStyles = css`
   *,
   *::before,

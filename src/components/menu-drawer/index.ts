@@ -3,10 +3,11 @@ import { customElement, property, queryAll } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { xMarkSVG } from "@/assets/lit-svg";
 import { drawerStyles } from "./styles";
+import { utilClasses } from "@/styles/utils";
 
 @customElement("menu-drawer")
 class MenuDrawer extends LitElement {
-  static styles = [drawerStyles];
+  static styles = [drawerStyles, utilClasses];
 
   @queryAll("a:not([disabled]), button:not([disabled])")
   _focusableEls!: NodeListOf<HTMLElement>;

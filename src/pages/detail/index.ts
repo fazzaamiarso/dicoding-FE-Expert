@@ -25,6 +25,32 @@ const detailLoading = () => html`
   </div>
 `;
 
+const reviewForm = ({ handleSubmit }: { handleSubmit: (e: SubmitEvent) => unknown }) => html`
+  <form @submit="${handleSubmit}" class="review__form">
+    <div class="review__input-container">
+      <label for="customer-name" class="review__label">Name</label>
+      <input
+        id="customer-name"
+        name="customer-name"
+        type="text"
+        class="review__input"
+        autocomplete="off"
+      />
+    </div>
+    <div class="review__input-container">
+      <label for="customer-review" class="review__label">Write your review</label>
+      <textarea
+        class="review__input review__textarea"
+        id="customer-review"
+        name="customer-review"
+        rows="${3}"
+        placeholder="What are your thoughts about this restaurant?"
+      ></textarea>
+    </div>
+    <button class="review__submit click-area">Submit</button>
+  </form>
+`;
+
 @customElement("detail-page")
 export default class DetailPage extends LitElement {
   static styles: CSSResultGroup = [resetStyles, utilClasses, detailStyles, commonStyles];
@@ -43,11 +69,16 @@ export default class DetailPage extends LitElement {
     args: () => [this.location.params.id],
   });
 
-  private async _toggleFavorite(restaurant: Restaurant) {
-    if (!favoriteRestaurantDB.checkIsSupported()) {
+  private _checkIDBFavoriteSupport() {
+    const isSupported = favoriteRestaurantDB.checkIsSupported();
+    if (!isSupported) {
       featureSupportToast.showToast();
-      return;
     }
+    return isSupported;
+  }
+
+  private async _toggleFavorite(restaurant: Restaurant) {
+    if (!this._checkIDBFavoriteSupport()) return;
     const isFavorited = await this._getFavorited(restaurant.id);
     if (!isFavorited) await favoriteRestaurantDB.insertSingle(restaurant);
     else await favoriteRestaurantDB.deleteSingle(restaurant.id);
@@ -62,7 +93,6 @@ export default class DetailPage extends LitElement {
     }
   }
 
-  // TODO: implement input validation and sanitazion
   private async _submitHandler(e: SubmitEvent) {
     e.preventDefault();
     if (!(e.currentTarget instanceof HTMLFormElement)) return;
@@ -151,23 +181,7 @@ export default class DetailPage extends LitElement {
               </div>
               <div class="review">
                 <h3 class="review__title">Customer Reviews</h3>
-                <form @submit="${this._submitHandler}" class="review__form">
-                  <div class="review__input-container">
-                    <label for="customer-name">Name</label>
-                    <input id="customer-name" name="customer-name" type="text" />
-                  </div>
-                  <div class="review__input-container">
-                    <label for="customer-review">Write your review</label>
-                    <textarea
-                      class="review__textarea"
-                      id="customer-review"
-                      name="customer-review"
-                      rows="${0}"
-                      placeholder="What are your thoughts about this restaurant?"
-                    ></textarea>
-                  </div>
-                  <button class="review__submit click-area">Submit</button>
-                </form>
+                ${reviewForm({ handleSubmit: this._submitHandler })}
                 <ul class="review__list">
                   ${restaurant.customerReviews.map((review) =>
                     reviewItemTemplate({

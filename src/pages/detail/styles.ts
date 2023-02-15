@@ -145,13 +145,42 @@ export const detailStyles = css`
     max-width: 600px;
   }
   .review__form {
+    padding: 1rem;
+    background-color: #1e2c47;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    border-radius: var(--rounded-sm);
   }
   .review__input-container {
     display: grid;
     margin-bottom: 1rem;
+    gap: 0.5rem;
+  }
+  .review__label {
+    font-weight: 500;
+  }
+  .review__input {
+    padding: 0.5rem;
+    background-color: var(--text-indigo-50);
+    border-radius: var(--rounded-sm);
+  }
+  .review__input:focus,
+  .review__input:focus-visible {
+    outline: 2px solid var(--logo-color);
+    outline-offset: 2px;
+  }
+  .review__submit {
+    font-weight: 600;
+    color: var(--text-indigo-50);
+    border: none;
+    border-radius: var(--rounded-sm);
+    background-color: var(--text-indigo-600);
+    transition: all 200ms ease;
+  }
+  .review__submit:hover {
+    cursor: pointer;
+    background-color: var(--text-indigo-500);
   }
   .review__textarea {
     resize: vertical;
@@ -175,10 +204,7 @@ export const detailStyles = css`
     width: 40px;
     border-radius: var(--rounded-sm);
   }
-  .review__submit {
-  }
-  .review__submit:disabled {
-  }
+
   .loading__catalog {
     padding: 1rem;
     width: 100%;

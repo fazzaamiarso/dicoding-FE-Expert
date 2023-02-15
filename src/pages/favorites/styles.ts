@@ -1,6 +1,9 @@
 import { css } from "lit";
 
 export const favoriteStyles = css`
+  .favorite__title {
+    margin-bottom: 1rem;
+  }
   .favorite__list {
     --row-gap: 1.5rem;
     --column-gap: 1.75rem;

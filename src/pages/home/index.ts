@@ -7,11 +7,11 @@ import RestaurantAPI from "@/lib/restaurant-api";
 import { Restaurant } from "@/types/restaurant-api";
 import { arrowDownSVG } from "@/assets/lit-svg";
 import { homeStyles } from "./styles";
-
+import { commonStyles } from "@/styles/common";
 
 @customElement("home-page")
 export default class HomePage extends LitElement {
-  static styles = [resetStyles, utilClasses, homeStyles];
+  static styles = [resetStyles, utilClasses, homeStyles, commonStyles];
 
   private _apiTask = new Task<any[], Restaurant[]>(this, RestaurantAPI.getAll, () => []);
 
@@ -64,7 +64,10 @@ export default class HomePage extends LitElement {
               [...Array(9).keys()].map(
                 () => html`<restaurant-card ?loading=${true}></restaurant-card>`
               ),
-            error: () => {},
+            error: (e: any) => html` <div class="error__container">
+              <h3 class="error__title">We're unable to get your request!</h3>
+              <p class="error__message">${e?.message || "Something went wrong!"}</p>
+            </div>`,
           })}
         </ul>
       </div>

@@ -5,7 +5,7 @@ import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "@/assets/li
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
-import HashRouter from "@/router";
+import HistoryRouter from "@/router";
 import { Restaurant, RestaurantWithDetail } from "@/types/restaurant-api";
 import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
@@ -13,6 +13,7 @@ import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
 import { featureSupportToast } from "@/lib/toast";
 import { formatRatingDisplay } from "@/utils/format-rating";
+import { commonStyles } from "@/styles/common";
 
 const detailLoading = () => html`
   <div class="layout">
@@ -26,9 +27,8 @@ const detailLoading = () => html`
 
 @customElement("detail-page")
 export default class DetailPage extends LitElement {
-  static styles: CSSResultGroup = [resetStyles, utilClasses, detailStyles];
+  static styles: CSSResultGroup = [resetStyles, utilClasses, detailStyles, commonStyles];
 
-  // INVESTIGATE IF THIS CAUSE WARNING
   @property({ type: Object })
   location!: RouteLocation;
 
@@ -79,6 +79,12 @@ export default class DetailPage extends LitElement {
         ${this._apiTask.render({
           initial: () => detailLoading(),
           pending: () => detailLoading(),
+          error: (e: any) => html`
+            <div class="error__container">
+              <h2 class="error__title">We're unable to get your request!</h2>
+              <p class="error__message">${e?.message || "Something went wrong!"}</p>
+            </div>
+          `,
           complete: (restaurant) => html`
             <div class="detail__header">
               <div class="detail__thumb">
@@ -95,7 +101,7 @@ export default class DetailPage extends LitElement {
                     <button
                       type="button"
                       class="click-area detail__action detail__action--back"
-                      @click="${HashRouter.back}"
+                      @click="${HistoryRouter.back}"
                     >
                       ${arrowLongLeftSVG()}
                       <span class="sr-only">Go back</span>
@@ -160,12 +166,7 @@ export default class DetailPage extends LitElement {
                       placeholder="What are your thoughts about this restaurant?"
                     ></textarea>
                   </div>
-                  <button
-                    class="review__submit click-area"
-                    ?disabled=${favoriteRestaurantDB.checkIsSupported()}
-                  >
-                    Submit
-                  </button>
+                  <button class="review__submit click-area">Submit</button>
                 </form>
                 <ul class="review__list">
                   ${restaurant.customerReviews.map((review) =>

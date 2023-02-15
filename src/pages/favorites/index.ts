@@ -1,34 +1,16 @@
 import { initialState, Task } from "@lit-labs/task";
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 import { Restaurant } from "@/types/restaurant-api";
 import { favoriteStyles } from "./styles";
+import { commonStyles } from "@/styles/common";
 
 @customElement("favorites-page")
 export default class FavoritesPage extends LitElement {
-  static styles = [
-    resetStyles,
-    utilClasses,
-    favoriteStyles,
-    css`
-      .error__container {
-        padding-block: 5rem;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        text-align: center;
-      }
-      .error__title {
-        font-size: 1.75rem;
-        color: var(--logo-color);
-      }
-    `,
-  ];
+  static styles = [resetStyles, utilClasses, favoriteStyles, commonStyles];
 
   private _apiTask = new Task<any[], Restaurant[]>(
     this,

@@ -9,7 +9,7 @@ class HistoryRouter {
 
   private _outlet: HTMLElement;
 
-  private _params: Record<string, string> = {};
+  private _paramsMap: Map<string, string> = new Map();
 
   private _routeMatchIdx: number = -1;
 
@@ -35,7 +35,8 @@ class HistoryRouter {
     if (!pageOutlet.component) return;
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
     this._activeRoute = pathName;
-    pageEl.location = { params: this._params };
+    const paramsFromMap = Object.fromEntries(this._paramsMap);
+    pageEl.location = { params: paramsFromMap };
     this._outlet.innerHTML = "";
     this._outlet.appendChild(pageEl);
   }
@@ -75,18 +76,16 @@ class HistoryRouter {
     return isMatched;
   }
 
-  private _matchRoute(urlPath: string) {
-    const paramsMap = new Map();
+  private _splitPathToSegment = (path: string) =>
+    path
+      .split("/")
+      .slice(1)
+      .filter((r) => r !== "");
 
+  private _matchRoute(urlPath: string) {
     const matchedRouteIdx = this._routes.findIndex((route) => {
-      const routeSegments = route.path
-        .split("/")
-        .slice(1)
-        .filter((r) => r !== "");
-      const urlSegments = urlPath
-        .split("/")
-        .slice(1)
-        .filter((r) => r !== "");
+      const routeSegments = this._splitPathToSegment(route.path);
+      const urlSegments = this._splitPathToSegment(urlPath);
 
       if (routeSegments.length !== urlSegments.length) return false;
 
@@ -96,16 +95,15 @@ class HistoryRouter {
         return isPathMatch || isParam;
       });
 
-      if (isMatched) {
-        routeSegments.forEach((segment, idx) => {
-          if (segment.startsWith(":")) {
-            paramsMap.set(segment.slice(1), urlSegments[idx]);
-          }
-        });
-        this._params = Object.fromEntries(paramsMap.entries());
-        return true;
-      }
-      return false;
+      if (!isMatched) return false;
+
+      routeSegments.forEach((segment, idx) => {
+        if (segment.startsWith(":")) {
+          this._paramsMap.set(segment.slice(1), urlSegments[idx]);
+        }
+      });
+
+      return true;
     });
 
     this._routeMatchIdx = matchedRouteIdx;

@@ -1,90 +1,118 @@
-/* eslint-disable no-underscore-dangle */
-import "./menu-drawer.style.scss";
+import { html, LitElement } from "lit";
+import { customElement, property, queryAll } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { xMarkSVG } from "@/assets/lit-svg";
+import { drawerStyles } from "./styles";
+import { utilClasses } from "@/styles/utils";
 
-class MenuDrawer extends HTMLElement {
-  private focusableEls: NodeListOf<HTMLElement>;
+@customElement("menu-drawer")
+class MenuDrawer extends LitElement {
+  static styles = [drawerStyles, utilClasses];
 
-  private firstFocusableEl: HTMLElement;
+  @queryAll("a:not([disabled]), button:not([disabled])")
+  _focusableEls!: NodeListOf<HTMLElement>;
 
-  private lastFocusableEl: HTMLElement;
+  private _firstFocusableEl!: HTMLElement;
 
-  private isOpen: boolean;
+  private _lastFocusableEl!: HTMLElement;
 
-  constructor() {
-    const drawerTemplate = document.querySelector("#menu-drawer-template") as HTMLTemplateElement;
+  @property() open: boolean = false;
 
-    super();
+  @property() triggerElement!: HTMLElement;
 
-    this.appendChild(drawerTemplate.content.cloneNode(true));
-
-    this.focusableEls = this.querySelectorAll("a:not([disabled]), button:not([disabled])");
-    this.firstFocusableEl = this.focusableEls[0] as HTMLElement;
-    this.lastFocusableEl = this.focusableEls[this.focusableEls.length - 1] as HTMLElement;
-
-    this.setAllTabIndex("-1");
+  protected render(): unknown {
+    return html`
+      <div
+        id="overlay"
+        class=${classMap({ menu__overlay: true, "is-open": this.open })}
+        @click="${this._closeDrawer}"
+      ></div>
+      <div id="menu" class=${classMap({ menu: true, "is-open": this.open })}>
+        <div class="menu__inner">
+          <button
+            type="button"
+            id="close-menu"
+            class="menu__close click-area"
+            aria-label="close menu"
+            @click="${this._closeDrawer}"
+          >
+            ${xMarkSVG()}
+          </button>
+          <nav class="menu__nav">
+            <ul class="menu__list">
+              <li class="menu__item"><a class="menu__link click-area" href="/">Home</a></li>
+              <li class="menu__item">
+                <a class="menu__link click-area" href="/favorites">Favorite</a>
+              </li>
+              <li class="menu__item">
+                <a
+                  class="menu__link click-area"
+                  href="https://www.fazzaamiarso.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >About Us</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    `;
   }
 
-  connectedCallback() {
-    const closeBtn = this.querySelector("#close-menu") as HTMLButtonElement;
-    const overlay = this.querySelector("#overlay") as HTMLButtonElement;
-    [overlay, closeBtn].forEach((el) => {
-      el.addEventListener("click", (e) => {
-        this.open = undefined;
-        e.preventDefault();
-        e.stopPropagation();
-      });
+  protected firstUpdated() {
+    this.setAllTabIndex("-1");
+    this.triggerElement.addEventListener("click", async (e) => {
+      await this._openDrawer(e);
     });
   }
 
-  get open() {
-    return String(this.hasAttribute("open"));
+  protected willUpdate(): void {
+    this._firstFocusableEl = this._focusableEls[0] as HTMLElement;
+    this._lastFocusableEl = this._focusableEls[this._focusableEls.length - 1] as HTMLElement;
   }
 
-  set open(val: string | undefined) {
-    if (val) {
-      this.setAttribute("open", "");
-      this.focusTrap();
-    } else {
-      this.removeAttribute("open");
-      this.cleanupFocusTrap();
-    }
-    this.isOpen = this.hasAttribute("open");
-    this.toggleStyle();
+  private async _closeDrawer(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.open = false;
+    await this.updateComplete;
+    this.cleanupFocusTrap();
   }
 
-  private toggleStyle() {
-    const isOpen = Boolean(this.isOpen);
-    const menuEl = this.querySelector("#menu") as HTMLElement;
-    const overlayEl = this.querySelector("#overlay") as HTMLElement;
+  private async _openDrawer(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
 
-    menuEl.style.transform = isOpen ? "translateX(0)" : "translateX(100%)";
-    overlayEl.style.opacity = isOpen ? "1" : "0";
-    overlayEl.style.transform = isOpen ? "scale(1)" : "scale(0)";
+    this.open = true;
+    await this.updateComplete;
+    this.focusTrap();
   }
 
   private handleEcape(e: KeyboardEvent) {
     if (!(e.key === "Esc" || e.key === "Escape")) return;
-    this.open = undefined;
+    this.open = false;
   }
 
   private handleFocusTrap(e: KeyboardEvent) {
-    const activeEl = document.activeElement;
+    if (!(this.renderRoot instanceof ShadowRoot)) return;
+    const activeEl = this.renderRoot.activeElement;
     const isTabPressed = e.key === "Tab";
     if (!isTabPressed) return;
 
-    if (e.shiftKey && activeEl === this.firstFocusableEl) {
-      this.lastFocusableEl.focus();
+    if (e.shiftKey && activeEl === this._firstFocusableEl) {
+      this._lastFocusableEl.focus();
       e.preventDefault();
     }
-    if (!e.shiftKey && activeEl === this.lastFocusableEl) {
-      this.firstFocusableEl.focus();
+    if (!e.shiftKey && activeEl === this._lastFocusableEl) {
+      this._firstFocusableEl.focus();
       e.preventDefault();
     }
   }
 
   private returnInitialFocus() {
-    const triggerEl = document.querySelector(`#${this.dataset.triggerId}`) as HTMLElement;
-    triggerEl.focus();
+    this.triggerElement.focus();
   }
 
   private cleanupFocusTrap() {
@@ -96,18 +124,16 @@ class MenuDrawer extends HTMLElement {
 
   private focusTrap() {
     this.setAllTabIndex("0");
-    this.firstFocusableEl.focus();
+    this._firstFocusableEl.focus();
     this.addEventListener("keydown", this.handleFocusTrap);
     this.addEventListener("keydown", this.handleEcape);
   }
 
   private setAllTabIndex(tabIndex: "0" | "1" | "-1") {
-    this.focusableEls.forEach((el) => {
+    this._focusableEls.forEach((el) => {
       el.setAttribute("tabindex", tabIndex ?? "-1");
     });
   }
 }
-
-customElements.define("menu-drawer", MenuDrawer);
 
 export default MenuDrawer;

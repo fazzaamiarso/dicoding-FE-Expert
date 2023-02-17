@@ -5,5 +5,11 @@
   },
   "plugins": ["@typescript-eslint"],
   "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
-  "root": true
+  "root": true,
+  "rules": {
+    "import/prefer-default-export": "off",
+    "import/extensions": "off",
+    "no-underscore-dangle": "off",
+    "class-methods-use-this": "off"
+  }
 }

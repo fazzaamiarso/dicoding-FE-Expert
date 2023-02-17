@@ -1,4 +1,13 @@
-*,
+import { css } from "lit";
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+// eslint-disable-next-line import/prefer-default-export
+export const resetStyles = css`
+  *,
   *::before,
   *::after {
     box-sizing: border-box;
@@ -46,3 +55,4 @@
     padding: 0;
     list-style: none;
   }
+`;

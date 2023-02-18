@@ -24,13 +24,13 @@ export default class RestaurantCard extends LitElement {
   static styles = [resetStyles, utilClasses, cardStyles];
 
   @property({ type: Object })
-  public restaurant!: Restaurant;
+  public restaurant: Restaurant | undefined;
 
   @property({ type: Boolean })
   public loading = false;
 
   protected render() {
-    if (this.loading) return catalogLoading();
+    if (this.loading || !this.restaurant) return catalogLoading();
     const rating = formatRatingDisplay(this.restaurant.rating);
     return html`
       <div class="catalog__card">
@@ -68,3 +68,4 @@ export default class RestaurantCard extends LitElement {
     `;
   }
 }
+

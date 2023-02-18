@@ -11,6 +11,7 @@ export const detailStyles = css`
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 2rem;
   }
   .detail__action {

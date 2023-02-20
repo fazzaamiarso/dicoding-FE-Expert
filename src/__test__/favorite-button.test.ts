@@ -1,35 +1,34 @@
-import { describe, expect, it } from "vitest";
-import { fixture, html, aTimeout } from "@open-wc/testing";
-import type { FavoriteButton } from "@/components";
+import { describe, expect, it, beforeAll } from "vitest";
+import { fixture, html } from "@open-wc/testing";
+import { screen } from "shadow-dom-testing-library";
+import { waitFor } from "@testing-library/dom";
 import "@/components";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 
-// @vitest-environment happy-dom
+// @vitest-environment jsdom
+
+const mockRestaurant = { id: "1", name: "a", description: "", pictureId: "", city: "", rating: 2 };
+
+beforeAll(async () => {
+  await fixture(html`<favorite-button .restaurant=${mockRestaurant}></favorite-button>`);
+});
 describe("Favorite Button", async () => {
-  const el = (await fixture(
-    html`<favorite-button
-      .restaurant=${{ id: "1", name: "a", description: "", pictureId: "", city: "", rating: 2 }}
-    ></favorite-button>`
-  )) as FavoriteButton;
-
   it("can favorite a restaurant", async () => {
-    const button = el.shadowRoot?.querySelector("button")!;
-    button.click();
-
-    // must wait for re-render and fake-indexeddb to complete. Using only `el.updateComplete` not suffice for some unknown reason.
-    await aTimeout(100); // this is bad but works for now
-    await el.updateComplete;
-
-    expect(button.textContent?.trim()).match(/remove/i);
+    const favButton = await screen.findByShadowRole("button");
+    favButton.click();
+    await waitFor(() => {
+      expect(favButton.textContent?.trim()).match(/remove/i);
+    });
+    expect(await favoriteRestaurantDB.getSingle("1")).toEqual(mockRestaurant);
   });
+
   it("can un-favorite a restaurant", async () => {
-    const button = el.shadowRoot?.querySelector("button")!;
-    expect(button.textContent?.trim()).match(/remove/i);
+    const favButton = await screen.findByShadowRole("button");
+    expect(favButton.textContent?.trim()).match(/remove/i);
 
-    button.click();
-    await aTimeout(100);
-    await el.updateComplete;
-
-    expect(await favoriteRestaurantDB.getSingle("1")).toBe(undefined);
+    favButton.click();
+    await waitFor(async () => {
+      expect(await favoriteRestaurantDB.getSingle("1")).toBe(undefined);
+    });
   });
 });

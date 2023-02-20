@@ -4,3 +4,5 @@ node_modules
 webpack.*
 .babelrc
 vitest.config.ts
+playwright
+playwright.config.ts

@@ -6,7 +6,6 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 const devServer: DevServerConfiguration = {
   static: path.resolve(__dirname, "dist"),
-  open: true,
   port: 9000,
   client: {
     overlay: {

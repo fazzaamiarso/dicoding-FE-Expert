@@ -15,7 +15,8 @@
     "bundle-analyze:show": "webpack-bundle-analyzer ./stats.json",
     "bundle-analyze": "run-s bundle-analyze:*",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "e2e": "playwright test"
   },
   "author": "Fazza Razaq Amiarso <fazzaamiarso@gmail.com> (https://www.fazzaamiarso.me/)",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "@babel/preset-typescript": "^7.18.6",
     "@faker-js/faker": "^7.6.0",
     "@open-wc/testing": "^3.0.0-next.5",
+    "@playwright/test": "^1.30.0",
     "@testing-library/dom": "^9.0.0",
     "@types/node": "^18.13.0",
     "@types/toastify-js": "^1.11.1",

@@ -35,7 +35,7 @@ class RestaurantAPI {
     const parsedResult = resultSchema.safeParse(result);
 
     if (!parsedResult.success) {
-      console.error(parsedResult.error.flatten);
+      console.error(parsedResult.error.flatten());
       throw new Error("Bad request payload!");
     }
 
@@ -56,7 +56,7 @@ class RestaurantAPI {
     const parsedResult = resultSchema.safeParse(result);
 
     if (!parsedResult.success) {
-      console.error(parsedResult.error.flatten);
+      console.error(parsedResult.error.flatten());
       throw new Error("Bad request payload!");
     }
 
@@ -86,7 +86,7 @@ class RestaurantAPI {
     const parsedResult = apiResponseSchema.safeParse(result);
 
     if (!parsedResult.success) {
-      console.error(parsedResult.error.flatten);
+      console.error(parsedResult.error.flatten());
       throw new Error("Something went wrong!");
     }
   }

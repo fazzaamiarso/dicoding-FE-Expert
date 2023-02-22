@@ -24,7 +24,11 @@ export default class HomePage extends LitElement {
     return html`
       <div class="hero">
         <div class="hero__overlay"></div>
-        <img class="hero__img" src="images/heros/hero-image_2.jpg" alt="" />
+        <picture>
+          <source type="image/webp" srcset="images/hero-image_2.webp" />
+          <source type="image/jpeg" srcset="images/heros/hero-image_2.jpg" />
+          <img src="images/heros/hero-image_2.jpg" alt="" class="hero__img" />
+        </picture>
         <div class="hero__content">
           <div class="hero__content--inner">
             <div class="hero__text">

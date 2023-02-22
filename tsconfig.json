@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "convert-image.mjs"],
   "exclude": ["node_modules"]
 }
 

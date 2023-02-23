@@ -18,40 +18,40 @@ export default merge(common, {
       },
     ],
   },
-  optimization: {
-    minimizer: [
-      new ImageMinimizerPlugin({
-        minimizer: {
-          implementation: ImageMinimizerPlugin.sharpMinify,
-          options: {
-            encodeOptions: {
-              jpeg: {
-                // https://sharp.pixelplumbing.com/api-output#jpeg
-                quality: 60,
-                progressive: true,
-              },
-              webp: {
-                // https://sharp.pixelplumbing.com/api-output#webp
-                lossless: true,
-              },
-              avif: {
-                // https://sharp.pixelplumbing.com/api-output#avif
-                lossless: true,
-              },
+  // optimization: {
+  //   minimizer: [
+  //     new ImageMinimizerPlugin({
+  //       minimizer: {
+  //         implementation: ImageMinimizerPlugin.sharpMinify,
+  //         options: {
+  //           encodeOptions: {
+  //             jpeg: {
+  //               // https://sharp.pixelplumbing.com/api-output#jpeg
+  //               quality: 60,
+  //               progressive: true,
+  //             },
+  //             webp: {
+  //               // https://sharp.pixelplumbing.com/api-output#webp
+  //               lossless: true,
+  //             },
+  //             avif: {
+  //               // https://sharp.pixelplumbing.com/api-output#avif
+  //               lossless: true,
+  //             },
 
-              // png by default sets the quality to 100%, which is same as lossless
-              // https://sharp.pixelplumbing.com/api-output#png
-              png: {},
+  //             // png by default sets the quality to 100%, which is same as lossless
+  //             // https://sharp.pixelplumbing.com/api-output#png
+  //             png: {},
 
-              // gif does not support lossless compression at all
-              // https://sharp.pixelplumbing.com/api-output#gif
-              gif: {},
-            },
-          },
-        },
-      }),
-    ],
-  },
+  //             // gif does not support lossless compression at all
+  //             // https://sharp.pixelplumbing.com/api-output#gif
+  //             gif: {},
+  //           },
+  //         },
+  //       },
+  //     }),
+  //   ],
+  // },
   plugins: [
     new WorkboxWebpackPlugin.InjectManifest({
       swSrc: path.resolve(__dirname, "src/utils/sw/sw.ts"),

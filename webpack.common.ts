@@ -49,6 +49,9 @@ const config: webpack.Configuration = {
         {
           from: path.resolve(__dirname, "public/"),
           to: path.resolve(__dirname, "dist/"),
+          // globOptions: {
+          //   ignore: ["**/images/**"],
+          // },
         },
       ],
     }),

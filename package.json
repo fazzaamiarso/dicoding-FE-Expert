@@ -6,10 +6,10 @@
   "private": true,
   "scripts": {
     "start-dev": "webpack-dev-server --config webpack.dev.ts",
+    "image-transform": "ts-node scripts/transform-image-sizes.js",
     "image-convert": "ts-node scripts/convert-image.mjs",
-    "image-transform": "ts-node transform-image-sizes.js",
     "build-project": "webpack --config webpack.prod.ts",
-    "build-image": "run-s image-convert",
+    "build-image": "run-s image-*",
     "build": "run-s build-*",
     "lint": "eslint ./src --ext .js,.ts --fix",
     "check": "tsc --noEmit --project ./tsconfig.json",

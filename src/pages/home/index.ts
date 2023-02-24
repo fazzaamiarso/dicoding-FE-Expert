@@ -25,11 +25,26 @@ export default class HomePage extends LitElement {
       <div class="hero">
         <div class="hero__overlay"></div>
         <picture>
-          <source media="(max-width: 500px)" srcset="images/webp/hero-image_2-small.webp" />
-          <source media="(max-width: 500px)" srcset="images/jpg/hero-image_2-small.jpg" />
+          <source
+            media="(max-width: 500px)"
+            type="image/webp"
+            srcset="images/webp/hero-image_2-small.webp"
+          />
+          <source
+            media="(max-width: 500px)"
+            type="image/jpeg"
+            srcset="images/jpg/hero-image_2-small.jpg"
+          />
           <source type="image/webp" srcset="images/webp/hero-image_2.webp" />
           <source type="image/jpeg" srcset="images/jpg/hero-image_2.jpg" />
-          <img src="images/heros/hero-image_2.jpg" alt="" class="hero__img" />
+          <img
+            src="images/heros/hero-image_2.jpg"
+            type="image/jpeg"
+            media="all"
+            alt=""
+            class="hero__img"
+            fetchpriority="high"
+          />
         </picture>
         <div class="hero__content">
           <div class="hero__content--inner">

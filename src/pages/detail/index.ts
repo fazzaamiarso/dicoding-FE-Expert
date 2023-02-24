@@ -1,17 +1,15 @@
 import { Task } from "@lit-labs/task";
 import { CSSResultGroup, html, LitElement } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
-import { arrowLongLeftSVG, heartFilledSVG, heartSVG, starSVG } from "@/assets/lit-svg";
+import { customElement, property } from "lit/decorators.js";
+import { arrowLongLeftSVG, starSVG } from "@/assets/lit-svg";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
-import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 import HistoryRouter from "@/router";
-import { Restaurant, RestaurantWithDetail } from "@/types/restaurant-api";
+import { RestaurantWithDetail } from "@/types/restaurant-api";
 import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
 import { menuItemTemplate, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
-import { featureSupportToast } from "@/lib/toast";
 import { formatRatingDisplay } from "@/utils/format-rating";
 import { commonStyles } from "@/styles/common";
 
@@ -58,40 +56,10 @@ export default class DetailPage extends LitElement {
   @property({ type: Object })
   location!: RouteLocation;
 
-  @state() private _isFavorited = false;
-
-  async firstUpdated() {
-    this._isFavorited = await this._getFavorited(this.location.params.id);
-  }
-
   private _apiTask = new Task<string[], RestaurantWithDetail>(this, {
     task: async ([restaurantId]) => RestaurantAPI.getById(restaurantId),
     args: () => [this.location.params.id],
   });
-
-  private _checkIDBFavoriteSupport() {
-    const isSupported = favoriteRestaurantDB.checkIsSupported();
-    if (!isSupported) {
-      featureSupportToast.showToast();
-    }
-    return isSupported;
-  }
-
-  private async _toggleFavorite(restaurant: Restaurant) {
-    if (!this._checkIDBFavoriteSupport()) return;
-    const isFavorited = await this._getFavorited(restaurant.id);
-    if (!isFavorited) await favoriteRestaurantDB.insertSingle(restaurant);
-    else await favoriteRestaurantDB.deleteSingle(restaurant.id);
-    this._isFavorited = !isFavorited;
-  }
-
-  private async _getFavorited(restaurantId: string) {
-    try {
-      return Boolean(await favoriteRestaurantDB.getSingle(restaurantId));
-    } catch {
-      return false;
-    }
-  }
 
   private async _submitHandler(e: SubmitEvent) {
     e.preventDefault();
@@ -136,16 +104,7 @@ export default class DetailPage extends LitElement {
                       ${arrowLongLeftSVG()}
                       <span class="sr-only">Go back</span>
                     </button>
-                    <button
-                      type="button"
-                      class="click-area detail__action detail__action--favorite"
-                      @click="${() => this._toggleFavorite(restaurant)}"
-                    >
-                      ${this._isFavorited ? heartFilledSVG() : heartSVG()}
-                      <span class="sr-only"
-                        >${this._isFavorited ? "Remove from favorite" : "Add to favorite"}</span
-                      >
-                    </button>
+                    <favorite-button .restaurant=${restaurant}></favorite-button>
                   </div>
                   <p>${restaurant.address}, ${restaurant.city}</p>
                   <h2 class="detail__name">${restaurant.name}</h2>

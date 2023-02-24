@@ -16,7 +16,11 @@ export default class NavBar extends LitElement {
 
   protected render() {
     return html` <header class="navbar layout">
-      <img src="images/logo.jpeg" alt="" width="50" />
+      <picture>
+        <source type="image/webp" srcset="images/webp/logo.webp" />
+        <source type="image/jpeg" srcset="images/jpg/logo.jpeg" />
+        <img src="images/logo.jpeg" alt="" width="50" />
+      </picture>
       <h1 class="navbar__title sr-only">Food Hunt</h1>
       <nav class="navbar__nav">
         <ul class="navbar__list">

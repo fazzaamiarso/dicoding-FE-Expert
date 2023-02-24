@@ -3,3 +3,8 @@ node_modules
 .eslintrc
 webpack.*
 .babelrc
+vitest.config.ts
+playwright
+playwright.config.ts
+*.mjs
+*.js

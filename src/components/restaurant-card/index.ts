@@ -36,14 +36,19 @@ export default class RestaurantCard extends LitElement {
       <div class="catalog__card">
         <div class="catalog__section catalog__section--top">
           <div class="catalog__thumb">
-            <img
+            <lazy-image data-src=${RestaurantAPI.buildImageURL(
+              this.restaurant.pictureId
+            )} width="40"
+              height="40"
+              alt="${this.restaurant.name} restaurant"></lazy-image>
+            <!-- <img
               src="${RestaurantAPI.buildImageURL(this.restaurant.pictureId)}"
               width="40"
               height="40"
               alt="${this.restaurant.name} restaurant"
               class="catalog__img"
               loading="lazy"
-            />
+            /> -->
           </div>
           <div class="catalog__content">
             <h3 class="catalog__title">${this.restaurant.name}</h3>

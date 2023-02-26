@@ -22,5 +22,5 @@ export default merge(common, {
   mode: "development",
   devtool: "inline-source-map",
   devServer,
-  plugins: [new CleanWebpackPlugin()],
+  // plugins: [new CleanWebpackPlugin()],
 });

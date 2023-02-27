@@ -40,15 +40,9 @@ export default class RestaurantCard extends LitElement {
               this.restaurant.pictureId
             )} width="40"
               height="40"
-              alt="${this.restaurant.name} restaurant"></lazy-image>
-            <!-- <img
-              src="${RestaurantAPI.buildImageURL(this.restaurant.pictureId)}"
-              width="40"
-              height="40"
               alt="${this.restaurant.name} restaurant"
-              class="catalog__img"
-              loading="lazy"
-            /> -->
+              .imageStyle=${{ "border-radius": "var(--rounded-md)" }}
+              ></lazy-image>
           </div>
           <div class="catalog__content">
             <h3 class="catalog__title">${this.restaurant.name}</h3>

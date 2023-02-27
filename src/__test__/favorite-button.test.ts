@@ -12,7 +12,7 @@ const mockRestaurant = { id: "1", name: "a", description: "", pictureId: "", cit
 beforeAll(async () => {
   await fixture(html`<favorite-button .restaurant=${mockRestaurant}></favorite-button>`);
 });
-describe("Favorite Button", async () => {
+describe("favorite-button", async () => {
   it("can favorite a restaurant", async () => {
     const favButton = await screen.findByShadowRole("button");
     favButton.click();

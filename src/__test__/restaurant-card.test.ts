@@ -5,8 +5,8 @@ import { html } from "lit/static-html.js";
 import type { RestaurantCard } from "@/components";
 import "@/components/restaurant-card";
 
-// @vitest-environment happy-dom
-describe("Test should run!", () => {
+// @vitest-environment jsdom
+describe("restaurant-card", () => {
   it("render the component", async () => {
     const card = (await fixture(
       html`<restaurant-card .restaurant=${undefined} ?loading=${false}></restaurant-card>`

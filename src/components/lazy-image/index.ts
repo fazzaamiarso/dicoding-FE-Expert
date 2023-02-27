@@ -1,9 +1,13 @@
 import { LitElement, html } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 import { customElement, property, query, state } from "lit/decorators.js";
+import { resetStyles } from "@/styles/reset";
 
 @customElement("lazy-image")
 export default class LazyImage extends LitElement {
+  static styles = [resetStyles];
+
   @property({ reflect: true }) src: string | undefined = undefined;
 
   @property({ reflect: true }) alt = "";
@@ -14,6 +18,9 @@ export default class LazyImage extends LitElement {
 
   @property({ type: String })
   "data-src" = "";
+
+  @property()
+  imageStyle: { [name: string]: string | undefined | null } = {};
 
   @state()
   _useNative = false;
@@ -37,7 +44,8 @@ export default class LazyImage extends LitElement {
   }
 
   firstUpdated() {
-    if (this._useNative) {
+    const isIntersectionObserverSupported = "IntersectionObserver" in window;
+    if (this._useNative || !isIntersectionObserverSupported) {
       this._loadImage();
       return;
     }
@@ -56,6 +64,7 @@ export default class LazyImage extends LitElement {
 
   protected render() {
     return html` <img
+      style=${styleMap(this.imageStyle)}
       src=${ifDefined(this.src)}
       alt=${this.alt}
       aria-hidden=${this.src ? "false" : "true"}

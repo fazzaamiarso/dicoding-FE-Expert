@@ -3,6 +3,9 @@ import { merge } from "webpack-merge";
 import WorkboxWebpackPlugin from "workbox-webpack-plugin";
 import path from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import CompressionPlugin from "compression-webpack-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 export default merge(common, {
   mode: "production",
@@ -19,8 +22,20 @@ export default merge(common, {
     ],
   },
   optimization: {
-    minimize: true,
+    moduleIds: "deterministic",
     runtimeChunk: "single",
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: true,
+          format: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+      new CssMinimizerPlugin(),
+    ],
     splitChunks: {
       chunks: "all",
       minSize: 20000,
@@ -40,6 +55,12 @@ export default merge(common, {
           priority: -20,
           reuseExistingChunk: true,
         },
+        styles: {
+          name: "styles",
+          type: "css/mini-extract",
+          chunks: "all",
+          enforce: true,
+        },
       },
     },
   },
@@ -51,6 +72,10 @@ export default merge(common, {
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "[id].[contenthash].css",
+    }),
+    new CompressionPlugin({
+      algorithm: "gzip",
+      test: /.js$|.css$/,
     }),
   ],
 });

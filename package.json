@@ -16,7 +16,7 @@
     "serve": "http-server dist",
     "start-prod": "run-s check build serve",
     "bundle-analyze:generate": "webpack --config webpack.prod.ts --json > stats.json",
-    "bundle-analyze:show": "webpack-bundle-analyzer ./stats.json",
+    "bundle-analyze:show": "webpack-bundle-analyzer ./stats.json dist/",
     "bundle-analyze": "run-s bundle-analyze:*",
     "test": "vitest run",
     "test:watch": "vitest",

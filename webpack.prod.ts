@@ -4,7 +4,6 @@ import WorkboxWebpackPlugin from "workbox-webpack-plugin";
 import path from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import TerserPlugin from "terser-webpack-plugin";
-import CompressionPlugin from "compression-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 export default merge(common, {
@@ -72,10 +71,6 @@ export default merge(common, {
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "[id].[contenthash].css",
-    }),
-    new CompressionPlugin({
-      algorithm: "gzip",
-      test: /.js$|.css$/,
     }),
   ],
 });

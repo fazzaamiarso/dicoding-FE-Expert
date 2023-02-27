@@ -37,7 +37,7 @@ test("Favorite and Un-favorite a restaurant", async ({ page }) => {
     });
   });
 
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/");
 
   await page.locator("restaurant-card").first().click();
   await expect(page).toHaveURL(/.*restaurants.*/i);
@@ -65,4 +65,42 @@ test("Favorite and Un-favorite a restaurant", async ({ page }) => {
     .click();
   await expect(page).toHaveURL(/.*favorite.*/i);
   expect(await page.locator("restaurant-card").count()).toBe(0);
+});
+
+test.only("can post a review", async ({ page }) => {
+  await page.route("https://restaurant-api.dicoding.dev/list", (route) => {
+    route.fulfill({
+      body: JSON.stringify({
+        message: "",
+        error: false,
+        restaurants: [mockRestaurant],
+      }),
+    });
+  });
+  await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
+    route.fulfill({
+      body: JSON.stringify({
+        message: "",
+        error: false,
+        restaurant: mockRestaurant,
+      }),
+    });
+  });
+
+  await page.goto("/");
+  await page.locator("restaurant-card").first().click();
+
+  const input1 = page.getByLabel(/name/i);
+  await input1.type("bambang");
+  expect(await input1.inputValue()).toBe("bambang");
+
+  const input2 = page.getByLabel(/review/i);
+  await input2.type("food is great, atmosphere too");
+  expect(await input2.inputValue()).toBe("food is great, atmosphere too");
+
+  const submitButton = page.getByRole("button", { name: /submit/i });
+  await submitButton.focus();
+  await expect(submitButton).toBeFocused();
+
+  //TODO: HANDLE POST SUBMIT
 });

@@ -8,7 +8,7 @@ import HistoryRouter from "@/router";
 import { RestaurantWithDetail } from "@/types/restaurant-api";
 import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";
-import { menuItemTemplate, reviewItemTemplate } from "./templates";
+import { menuItemTemplate, reviewForm, reviewItemTemplate } from "./templates";
 import { detailStyles } from "./styles";
 import { formatRatingDisplay } from "@/utils/format-rating";
 import { commonStyles } from "@/styles/common";
@@ -21,32 +21,6 @@ const detailLoading = () => html`
       <div class="loading__block"></div>
     </div>
   </div>
-`;
-
-const reviewForm = ({ handleSubmit }: { handleSubmit: (e: SubmitEvent) => unknown }) => html`
-  <form @submit="${handleSubmit}" class="review__form">
-    <div class="review__input-container">
-      <label for="customer-name" class="review__label">Name</label>
-      <input
-        id="customer-name"
-        name="customer-name"
-        type="text"
-        class="review__input"
-        autocomplete="off"
-      />
-    </div>
-    <div class="review__input-container">
-      <label for="customer-review" class="review__label">Write your review</label>
-      <textarea
-        class="review__input review__textarea"
-        id="customer-review"
-        name="customer-review"
-        rows="${3}"
-        placeholder="What are your thoughts about this restaurant?"
-      ></textarea>
-    </div>
-    <button class="review__submit click-area">Submit</button>
-  </form>
 `;
 
 @customElement("detail-page")

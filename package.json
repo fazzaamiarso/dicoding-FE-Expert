@@ -20,7 +20,8 @@
     "bundle-analyze": "run-s bundle-analyze:*",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "e2e:debug": "playwright test --debug"
   },
   "author": "Fazza Razaq Amiarso <fazzaamiarso@gmail.com> (https://www.fazzaamiarso.me/)",
   "license": "ISC",

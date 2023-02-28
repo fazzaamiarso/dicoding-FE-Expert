@@ -1,7 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
-const mockRestaurant = {
+let mockRestaurant = {
   id: faker.datatype.uuid(),
   name: faker.company.name(),
   description: "",
@@ -17,90 +17,99 @@ const mockRestaurant = {
   customerReviews: [{ name: faker.name.firstName(), review: "", date: "12 februari 2020" }],
 };
 
-test("Favorite and Un-favorite a restaurant", async ({ page }) => {
-  await page.route("https://restaurant-api.dicoding.dev/list", (route) => {
-    route.fulfill({
-      body: JSON.stringify({
-        message: "",
-        error: false,
-        restaurants: [mockRestaurant],
-      }),
-    });
-  });
-  await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
-    route.fulfill({
-      body: JSON.stringify({
-        message: "",
-        error: false,
-        restaurant: mockRestaurant,
-      }),
-    });
-  });
+const createApiResponse = <T extends {}>(data: T) => {
+  return {
+    body: JSON.stringify({
+      message: "",
+      error: false,
+      ...data,
+    }),
+  };
+};
 
-  await page.goto("/");
+test.describe("Core features", () => {
+  let page: Page;
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    page = await context.newPage();
 
-  await page.locator("restaurant-card").first().click();
-  await expect(page).toHaveURL(/.*restaurants.*/i);
-
-  const favButton = page.locator("favorite-button");
-  await favButton.click();
-  await expect(favButton.getByRole("button")).toHaveClass(/favorite/i);
-
-  await page
-    .getByRole("banner")
-    .getByRole("link", { name: /favorite/i })
-    .click();
-  await expect(page).toHaveURL(/.*favorite.*/i);
-
-  await page.locator("restaurant-card").first().click();
-  await expect(page).toHaveURL(/.*restaurants.*/i);
-
-  const favButton2 = page.locator("favorite-button");
-  await expect(favButton2.getByRole("button")).toHaveClass(/favorite/i);
-  await favButton2.click();
-
-  await page
-    .getByRole("banner")
-    .getByRole("link", { name: /favorite/i })
-    .click();
-  await expect(page).toHaveURL(/.*favorite.*/i);
-  expect(await page.locator("restaurant-card").count()).toBe(0);
-});
-
-test.only("can post a review", async ({ page }) => {
-  await page.route("https://restaurant-api.dicoding.dev/list", (route) => {
-    route.fulfill({
-      body: JSON.stringify({
-        message: "",
-        error: false,
-        restaurants: [mockRestaurant],
-      }),
-    });
-  });
-  await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
-    route.fulfill({
-      body: JSON.stringify({
-        message: "",
-        error: false,
-        restaurant: mockRestaurant,
-      }),
+    await page.route("**/*", (route) =>
+      route.request().resourceType() === "image" ? route.abort() : route.continue()
+    );
+    await page.route("https://restaurant-api.dicoding.dev/list", (route) =>
+      route.fulfill(createApiResponse({ restaurants: [mockRestaurant] }))
+    );
+    await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
+      route.fulfill(createApiResponse({ restaurant: mockRestaurant }));
     });
   });
 
-  await page.goto("/");
-  await page.locator("restaurant-card").first().click();
+  test.beforeEach(async () => {
+    await page.goto("/");
+  });
 
-  const input1 = page.getByLabel(/name/i);
-  await input1.type("bambang");
-  expect(await input1.inputValue()).toBe("bambang");
+  test.afterAll(async ({ browser }) => {
+    await browser.close();
+  });
 
-  const input2 = page.getByLabel(/review/i);
-  await input2.type("food is great, atmosphere too");
-  expect(await input2.inputValue()).toBe("food is great, atmosphere too");
+  test("Favorite and Un-favorite a restaurant", async () => {
+    await page.locator("restaurant-card").first().click();
+    await page.waitForURL((url) => url.pathname.includes("restaurant"));
 
-  const submitButton = page.getByRole("button", { name: /submit/i });
-  await submitButton.focus();
-  await expect(submitButton).toBeFocused();
+    const favButton = page.locator("favorite-button");
+    await favButton.click();
+    await expect(favButton.getByRole("button")).toHaveClass(/favorite/i);
 
-  //TODO: HANDLE POST SUBMIT
+    await page
+      .getByRole("banner")
+      .getByRole("link", { name: /favorite/i })
+      .click();
+    await expect(page).toHaveURL(/.*favorite.*/i);
+
+    // Un-favorite a restaurant
+    await page.locator("restaurant-card").first().click();
+    await page.waitForURL((url) => url.pathname.includes("restaurant"));
+
+    const filledFavButton = page.locator("favorite-button");
+    await expect(filledFavButton.getByRole("button")).toHaveClass(/favorite/i);
+    await filledFavButton.click();
+
+    await page
+      .getByRole("banner")
+      .getByRole("link", { name: /favorite/i })
+      .click();
+    await expect(page.locator("restaurant-card")).toHaveCount(0);
+  });
+
+  test("can post a review", async () => {
+    await page.route("https://restaurant-api.dicoding.dev/review", (route) => {
+      const formData = route.request().postDataJSON();
+      mockRestaurant.customerReviews.push({
+        name: formData.name,
+        review: formData.review,
+        date: "23 maret 2020",
+      });
+      route.fulfill(createApiResponse({}));
+    });
+
+    await page.locator("restaurant-card").first().click();
+
+    const customer = {
+      name: faker.name.firstName(),
+      review: faker.lorem.sentence(),
+    };
+    const nameInput = page.getByLabel(/name/i);
+    await nameInput.fill(customer.name);
+
+    const reviewInput = page.getByLabel(/review/i);
+    await reviewInput.fill(customer.review);
+
+    await expect(nameInput).toHaveValue(customer.name);
+    await expect(reviewInput).toHaveValue(customer.review);
+
+    const submitButton = page.getByRole("button", { name: /submit/i });
+    await submitButton.click();
+
+    await expect(page.getByTestId("review-item")).toHaveCount(2);
+  });
 });

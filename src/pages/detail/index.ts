@@ -42,7 +42,7 @@ export default class DetailPage extends LitElement {
     const name = formData.get("customer-name") as string;
     const review = formData.get("customer-review") as string;
     await RestaurantAPI.postSingleReview({ name, review, id: this.location.params.id });
-    this._apiTask.run([this.location.params.id]);
+    await this._apiTask.run([this.location.params.id]);
   }
 
   render() {

@@ -19,7 +19,7 @@ export const reviewItemTemplate = ({
   publishedAt: string;
 }) => {
   const avatarUrl = generateRandomAvatar(name);
-  return html`<li class="review__item">
+  return html`<li class="review__item" data-testid="review-item">
     <img src=${avatarUrl} alt="" class="review__avatar" />
     <div class="review__content">
       <h4 class="review__reviewer">${name}</h4>

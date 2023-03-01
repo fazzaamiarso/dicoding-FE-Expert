@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { arrowLongLeftSVG, starSVG } from "@/assets/lit-svg";
 import { resetStyles } from "@/styles/reset";
 import { utilClasses } from "@/styles/utils";
-import HistoryRouter from "@/router";
+import HistoryRouter from "@/router/router";
 import { RestaurantWithDetail } from "@/types/restaurant-api";
 import { RouteLocation } from "@/types/router";
 import RestaurantAPI from "@/lib/restaurant-api";

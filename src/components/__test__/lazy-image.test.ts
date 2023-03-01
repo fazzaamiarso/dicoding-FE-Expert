@@ -9,10 +9,7 @@ describe("lazy-image", async () => {
   const mockImage = "random.png";
   const altText = "a text for testing";
   it("load image immediately if IntersectionObserver and native lazy loading aren't supported!", async () => {
-    const renderedEl = (await fixture(
-      html`<lazy-image data-src=${mockImage}></lazy-image>`
-    )) as LazyImage;
-    await renderedEl.updateComplete;
+    (await fixture(html`<lazy-image data-src=${mockImage}></lazy-image>`)) as LazyImage;
     expect(window.IntersectionObserver).toBeUndefined();
     expect("loading" in HTMLImageElement.prototype).toBeFalsy();
     const img = await screen.findByShadowRole("img");

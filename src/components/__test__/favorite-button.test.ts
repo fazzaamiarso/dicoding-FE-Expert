@@ -19,6 +19,7 @@ const restaurant = {
 };
 
 const user = userEvent.setup();
+indexedDB = new IDBFactory();
 
 describe("favorite-button", async () => {
   describe("when restaurant is defined", async () => {

@@ -8,7 +8,7 @@ import RestaurantAPI from "@/lib/restaurant-api";
 import { cardStyles } from "./styles";
 import { formatRatingDisplay } from "@/utils/format-rating";
 
-const catalogLoading = () => html`<div class="loading__catalog">
+const catalogLoading = () => html`<div data-testid="loading-catalog" class="loading__catalog">
   <div class="loading__content">
     <div class="loading__block loading__block--img"></div>
     <div class="loading__stack">
@@ -33,7 +33,7 @@ export default class RestaurantCard extends LitElement {
     if (this.loading || !this.restaurant) return catalogLoading();
     const rating = formatRatingDisplay(this.restaurant.rating);
     return html`
-      <div class="catalog__card">
+      <div data-testid="catalog-card" class="catalog__card">
         <div class="catalog__section catalog__section--top">
           <div class="catalog__thumb">
             <lazy-image data-src=${RestaurantAPI.buildImageURL(

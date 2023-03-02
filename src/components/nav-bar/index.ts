@@ -11,7 +11,7 @@ export default class NavBar extends LitElement {
 
   firstUpdated() {
     const drawer = this.renderRoot.querySelector("menu-drawer")!;
-    drawer.triggerElement = this.renderRoot.querySelector("#menu-button") as HTMLElement;
+    drawer.setTriggerElement(this.renderRoot.querySelector("#menu-button") as HTMLElement);
   }
 
   protected render() {

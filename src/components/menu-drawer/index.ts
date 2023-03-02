@@ -16,9 +16,9 @@ class MenuDrawer extends LitElement {
 
   private _lastFocusableEl!: HTMLElement;
 
-  @property() open: boolean = false;
+  @property({ type: Boolean, reflect: true }) open: boolean = false;
 
-  @property() triggerElement!: HTMLElement;
+  @property() triggerElement?: HTMLElement;
 
   protected render(): unknown {
     return html`
@@ -62,9 +62,6 @@ class MenuDrawer extends LitElement {
 
   protected firstUpdated() {
     this.setAllTabIndex("-1");
-    this.triggerElement.addEventListener("click", async (e) => {
-      await this._openDrawer(e);
-    });
   }
 
   protected willUpdate(): void {
@@ -112,7 +109,7 @@ class MenuDrawer extends LitElement {
   }
 
   private returnInitialFocus() {
-    this.triggerElement.focus();
+    this.triggerElement?.focus();
   }
 
   private cleanupFocusTrap() {
@@ -132,6 +129,13 @@ class MenuDrawer extends LitElement {
   private setAllTabIndex(tabIndex: "0" | "1" | "-1") {
     this._focusableEls.forEach((el) => {
       el.setAttribute("tabindex", tabIndex ?? "-1");
+    });
+  }
+
+  public setTriggerElement(element: HTMLElement) {
+    this.triggerElement = element;
+    this.triggerElement.addEventListener("click", async (e) => {
+      await this._openDrawer(e);
     });
   }
 }

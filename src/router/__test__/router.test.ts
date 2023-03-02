@@ -1,27 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { fixture, fixtureCleanup, html, expect as DOMExpect } from "@open-wc/testing";
 import { screen } from "shadow-dom-testing-library";
-import "@/components";
 import HistoryRouter from "../router";
 import "./utils/fallback";
 
 // @vitest-environment jsdom
 describe("History Router", async () => {
+  let outlet: HTMLElement;
+  beforeEach(async () => {
+    await fixture(html`<div data-testid="test-container"></div>`);
+    outlet = screen.getByTestId("test-container");
+  });
   afterEach(() => {
     fixtureCleanup();
   });
 
-  it("set routes properly", async () => {
-    await fixture(html`<div data-testid="placeholder"></div>`);
-    const router = new HistoryRouter({ outlet: screen.getByTestId("placeholder") });
-    router.setRoutes([{ path: "/", component: "lazy-image" }]);
-    expect(router.getRoutes()).toStrictEqual([{ path: "/", component: "lazy-image" }]);
+  it("configure routes properly with setter", async () => {
+    const router = new HistoryRouter({ outlet });
+    router.setRoutes([{ path: "/", component: "div" }]);
+    expect(router.getRoutes()).toStrictEqual([{ path: "/", component: "div" }]);
+  });
+
+  it("configure routes properly constructor", async () => {
+    const router = new HistoryRouter({
+      outlet,
+      routes: [{ path: "/", component: "div" }],
+    });
+    expect(router.getRoutes()).toStrictEqual([{ path: "/", component: "div" }]);
   });
 
   it("navigate properly with static method", async () => {
-    await fixture(html`<div data-testid="placeholder"></div>`);
-    const router = new HistoryRouter({ outlet: screen.getByTestId("placeholder") });
+    const router = new HistoryRouter({ outlet });
     router.setRoutes([
       { path: "/", component: "div" },
       { path: "/random", component: "div" },
@@ -33,8 +43,9 @@ describe("History Router", async () => {
   });
 
   it("navigate properly with href", async () => {
-    await fixture(html`<div data-testid="placeholder"><a href="/navigate-to">Click me</a></div>`);
-    const router = new HistoryRouter({ outlet: screen.getByTestId("placeholder") });
+    outlet = await fixture(html`<a href="/navigate-to">click me</a>`);
+
+    const router = new HistoryRouter({ outlet });
     router.setRoutes([
       { path: "/", component: "div" },
       { path: "/navigate", component: "div" },
@@ -43,10 +54,19 @@ describe("History Router", async () => {
     expect(window.location.pathname).toBe("/navigate-to");
   });
 
+  it("navigate to a url with dynamic params", async () => {
+    const router = new HistoryRouter({ outlet });
+    router.setRoutes([
+      { path: "/", component: "div" },
+      { path: "/posts/:id", component: "div" },
+    ]);
+    HistoryRouter.navigate("/posts/12345");
+    expect(window.location.pathname).toEqual("/posts/12345");
+  });
+
   describe("route not found", () => {
     it("render default fallback if not configured", async () => {
-      await fixture(html`<div data-testid="placeholder"></div>`);
-      const router = new HistoryRouter({ outlet: screen.getByTestId("placeholder") });
+      const router = new HistoryRouter({ outlet });
       router.setRoutes([
         { path: "/", component: "div" },
         { path: "/route1", component: "div" },
@@ -57,9 +77,8 @@ describe("History Router", async () => {
     });
 
     it("render configured fallback", async () => {
-      await fixture(html`<div data-testid="placeholder"></div>`);
       const router = new HistoryRouter({
-        outlet: screen.getByTestId("placeholder"),
+        outlet,
         fallbackPage: "fallback-test",
       });
       router.setRoutes([

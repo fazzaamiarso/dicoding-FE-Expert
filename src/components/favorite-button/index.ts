@@ -1,5 +1,5 @@
 import { html, LitElement } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { favoriteRestaurantDB } from "@/lib/favorite-restaurant-idb";
 import { Restaurant } from "@/types/restaurant-api";
 import { featureSupportToast } from "@/lib/toast";
@@ -14,7 +14,7 @@ export default class FavoriteButton extends LitElement {
 
   @state() private _isFavorited = false;
 
-  @state() public restaurant: Restaurant | undefined;
+  @property() public restaurant: Restaurant | undefined;
 
   async firstUpdated() {
     this._isFavorited =

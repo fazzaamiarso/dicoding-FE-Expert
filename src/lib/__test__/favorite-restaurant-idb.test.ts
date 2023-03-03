@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { faker } from "@faker-js/faker";
 import { describe, expect, it, beforeEach } from "vitest";
 import { favoriteRestaurantDB } from "../favorite-restaurant-idb";
@@ -55,5 +56,9 @@ describe("favorite-restaurant-idb", async () => {
     expect(restaurant).toBeDefined();
     await favoriteRestaurantDB.deleteSingle(restaurantData.id);
     expect(restaurant).toBeDefined();
+  });
+
+  it("throws when delete a non-existent id", async () => {
+    await expect(favoriteRestaurantDB.deleteSingle("2")).rejects.toThrowError();
   });
 });

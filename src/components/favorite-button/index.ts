@@ -32,6 +32,7 @@ export default class FavoriteButton extends LitElement {
   private async _toggleFavorite() {
     if (!this._checkIDBFavoriteSupport() || !this.restaurant) return;
     const isFavorited = await this._getFavorited(this.restaurant.id);
+
     if (!this._isFavorited) {
       await favoriteRestaurantDB.insertSingle(this.restaurant);
     } else {

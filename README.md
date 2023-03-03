@@ -12,6 +12,7 @@ Part of Dicoding Frontend Expert Path.
 - Playwright + Vitest
 
 ### Get Started
+Please run `npm run build` before running development mode to process picture.
 ```bash
 # Development mode
 npm run start-dev

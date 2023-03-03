@@ -34,13 +34,13 @@ class MenuDrawer extends LitElement {
             type="button"
             id="close-menu"
             class="menu__close click-area"
-            aria-label="close menu"
             @click="${this._closeDrawer}"
+            aria-label="close menu"
           >
             ${xMarkSVG()}
           </button>
           <nav class="menu__nav">
-            <ul class="menu__list">
+            <ul class="menu__list" id="navigation-menu" role="menu">
               <li class="menu__item"><a class="menu__link click-area" href="/">Home</a></li>
               <li class="menu__item">
                 <a class="menu__link click-area" href="/favorites">Favorite</a>
@@ -62,6 +62,8 @@ class MenuDrawer extends LitElement {
   }
 
   protected firstUpdated() {
+    this.triggerElement?.setAttribute("aria-expanded", "false");
+    this.triggerElement?.setAttribute("aria-controls", "navigation-menu");
     this.setAllTabIndex("-1");
   }
 
@@ -75,6 +77,7 @@ class MenuDrawer extends LitElement {
     e.stopPropagation();
 
     this.open = false;
+    this.triggerElement?.setAttribute("aria-expanded", "false");
     await this.updateComplete;
     this.cleanupFocusTrap();
   }
@@ -84,6 +87,7 @@ class MenuDrawer extends LitElement {
     e.stopPropagation();
 
     this.open = true;
+    this.triggerElement?.setAttribute("aria-expanded", "true");
     await this.updateComplete;
     this.focusTrap();
   }

@@ -39,7 +39,12 @@ export default class NavBar extends LitElement {
           </li>
         </ul>
       </nav>
-      <button type="button" id="menu-button" class="navbar__menu-button click-area">
+      <button
+        type="button"
+        id="menu-button"
+        class="navbar__menu-button click-area"
+        data-testid="menu-button"
+      >
         <span class="sr-only">Open menu button</span>
         ${tripleLineSVG()}
       </button>

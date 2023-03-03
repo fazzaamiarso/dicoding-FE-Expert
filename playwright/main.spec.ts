@@ -27,31 +27,31 @@ const createApiResponse = <T extends {}>(data: T) => {
   };
 };
 
-test.describe("Core features", () => {
-  let page: Page;
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext();
-    page = await context.newPage();
+let page: Page;
+test.beforeEach(async ({ browser }) => {
+  const context = await browser.newContext();
+  page = await context.newPage();
 
-    await page.route("**/*", (route) =>
-      route.request().resourceType() === "image" ? route.abort() : route.continue()
-    );
-    await page.route("https://restaurant-api.dicoding.dev/list", (route) =>
-      route.fulfill(createApiResponse({ restaurants: [mockRestaurant] }))
-    );
-    await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
-      route.fulfill(createApiResponse({ restaurant: mockRestaurant }));
-    });
+  await page.route("**/*", (route) =>
+    route.request().resourceType() === "image" ? route.abort() : route.continue()
+  );
+  await page.route("https://restaurant-api.dicoding.dev/list", (route) =>
+    route.fulfill(createApiResponse({ restaurants: [mockRestaurant] }))
+  );
+  await page.route("https://restaurant-api.dicoding.dev/detail/**", (route) => {
+    route.fulfill(createApiResponse({ restaurant: mockRestaurant }));
   });
+});
 
-  test.beforeEach(async () => {
-    await page.goto("/");
-  });
+test.beforeEach(async () => {
+  await page.goto("/");
+});
 
-  test.afterAll(async ({ browser }) => {
-    await browser.close();
-  });
+test.afterAll(async ({ browser }) => {
+  await browser.close();
+});
 
+test.describe("Core features", async () => {
   test("Favorite and Un-favorite a restaurant", async () => {
     await page.locator("restaurant-card").first().click();
     await page.waitForURL((url) => url.pathname.includes("restaurant"));
@@ -113,3 +113,6 @@ test.describe("Core features", () => {
     await expect(page.getByTestId("review-item")).toHaveCount(2);
   });
 });
+
+
+

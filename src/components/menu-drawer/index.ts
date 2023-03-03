@@ -24,6 +24,7 @@ class MenuDrawer extends LitElement {
     return html`
       <div
         id="overlay"
+        data-testid="overlay"
         class=${classMap({ menu__overlay: true, "is-open": this.open })}
         @click="${this._closeDrawer}"
       ></div>

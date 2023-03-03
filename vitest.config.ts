@@ -4,7 +4,7 @@ import "fake-indexeddb/auto";
 
 export default defineConfig({
   test: {
-    include: ["src/__test__/*"],
+    include: ["src/**/*.{test,spec}.{ts,js}"],
     setupFiles: ["fake-indexeddb/auto"],
   },
   resolve: {

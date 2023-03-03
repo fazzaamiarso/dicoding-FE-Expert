@@ -9,15 +9,26 @@ class HistoryRouter {
 
   private _outlet: HTMLElement;
 
+  private _fallback: RouteDef["component"];
+
   private _paramsMap: Map<string, string> = new Map();
 
   private _routeMatchIdx: number = -1;
 
   private _activeRoute: string = "";
 
-  constructor({ routes, outlet }: { routes?: RouteDef[]; outlet: HTMLElement }) {
+  constructor({
+    routes,
+    outlet,
+    fallbackPage,
+  }: {
+    outlet: HTMLElement;
+    routes?: RouteDef[];
+    fallbackPage?: RouteDef["component"];
+  }) {
     this._routes = routes ?? [];
     this._outlet = outlet;
+    this._fallback = fallbackPage;
 
     if (this._routes.length) {
       this._init();
@@ -28,17 +39,35 @@ class HistoryRouter {
     window.history.back();
   }
 
-  public render(pathName: string) {
-    if (!this._checkRouteMatch(pathName)) return;
+  static forward() {
+    window.history.forward();
+  }
+
+  private _render(pathName: string) {
+    if (!this._checkRouteMatch(pathName)) {
+      if (this._fallback === undefined) {
+        this._outlet.innerHTML = `<p>404 page not found!</p>`;
+      } else {
+        const pageEl = document.createElement(this._fallback) as TempAny;
+        this._outlet.innerHTML = "";
+        this._outlet.appendChild(pageEl);
+      }
+      document.title = "404 | Page not found";
+      return;
+    }
+
+    const paramsFromMap = Object.fromEntries(this._paramsMap);
 
     const pageOutlet = this._routes[this._routeMatchIdx];
     if (!pageOutlet.component) return;
+
     const pageEl = document.createElement(pageOutlet.component) as TempAny;
-    this._activeRoute = pathName;
-    const paramsFromMap = Object.fromEntries(this._paramsMap);
     pageEl.location = { params: paramsFromMap };
+
     this._outlet.innerHTML = "";
     this._outlet.appendChild(pageEl);
+
+    this._activeRoute = pathName;
   }
 
   private _init() {
@@ -52,7 +81,7 @@ class HistoryRouter {
         const path = window.location.pathname || "/";
         // prevent unnecessary re-render
         if (this._activeRoute === path) return;
-        this.render(path);
+        this._render(path);
       });
     });
   }
@@ -114,6 +143,15 @@ class HistoryRouter {
     this._routes = routes;
     this._init();
     return this;
+  }
+
+  public getRoutes() {
+    return [...this._routes];
+  }
+
+  static navigate(path: string) {
+    window.history.pushState({}, "", path);
+    window.dispatchEvent(routeChange);
   }
 }
 

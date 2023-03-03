@@ -45,12 +45,20 @@ class FavoriteRestaurantsDB {
 
   public async deleteSingle(restaurantId: string) {
     if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
+    const isRestaurantExist = await this.getSingle(restaurantId);
+    if (!isRestaurantExist) throw new Error(`Restaurant with id: ${restaurantId} doesn't exist!`);
     return (await this._dbPromise).delete(RESTAURANT_STORE_NAME, restaurantId);
   }
 
   public async insertSingle(restaurant: Restaurant) {
     if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).add(RESTAURANT_STORE_NAME, restaurant);
+  }
+
+  public async insertMany(restaurants: Restaurant[]) {
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
+    const tx = (await this._dbPromise).transaction(RESTAURANT_STORE_NAME, "readwrite");
+    await Promise.all([...restaurants.map((restaurant) => tx.store.add(restaurant)), tx.done]);
   }
 
   public async updateSingle(restaurant: Restaurant) {

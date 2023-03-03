@@ -6,6 +6,8 @@ import ESLintWebpackPlugin from "eslint-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 
+const __DEV__ = process.env.NODE_ENV !== "production";
+
 const config: webpack.Configuration = {
   entry: {
     app: path.resolve(__dirname, "src/index.ts"),
@@ -15,7 +17,7 @@ const config: webpack.Configuration = {
     extensions: [".ts", ".js"],
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: "[name].[contenthash].js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
     clean: true,
@@ -31,11 +33,20 @@ const config: webpack.Configuration = {
         test: /\.(scss|css)$/i,
         exclude: [/\.styles.scss$/],
         use: [
-          "style-loader",
-          { loader: MiniCssExtractPlugin.loader, options: { esModule: false } },
+          // can't separate config because order matter for processing module rules
+          __DEV__
+            ? "style-loader"
+            : { loader: MiniCssExtractPlugin.loader, options: { esModule: false } },
           "css-loader",
           "sass-loader",
         ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "./fonts/[name][ext]",
+        },
       },
     ],
   },
@@ -49,11 +60,13 @@ const config: webpack.Configuration = {
         {
           from: path.resolve(__dirname, "public/"),
           to: path.resolve(__dirname, "dist/"),
+          globOptions: {
+            ignore: ["**/fonts/*"],
+          },
         },
       ],
     }),
     new ESLintWebpackPlugin(),
-    new MiniCssExtractPlugin(),
   ],
 };
 

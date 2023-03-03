@@ -16,14 +16,15 @@ class MenuDrawer extends LitElement {
 
   private _lastFocusableEl!: HTMLElement;
 
-  @property() open: boolean = false;
+  @property({ type: Boolean, reflect: true }) open: boolean = false;
 
-  @property() triggerElement!: HTMLElement;
+  @property() triggerElement?: HTMLElement;
 
   protected render(): unknown {
     return html`
       <div
         id="overlay"
+        data-testid="overlay"
         class=${classMap({ menu__overlay: true, "is-open": this.open })}
         @click="${this._closeDrawer}"
       ></div>
@@ -33,13 +34,13 @@ class MenuDrawer extends LitElement {
             type="button"
             id="close-menu"
             class="menu__close click-area"
-            aria-label="close menu"
             @click="${this._closeDrawer}"
+            aria-label="close menu"
           >
             ${xMarkSVG()}
           </button>
           <nav class="menu__nav">
-            <ul class="menu__list">
+            <ul class="menu__list" id="navigation-menu" role="menu">
               <li class="menu__item"><a class="menu__link click-area" href="/">Home</a></li>
               <li class="menu__item">
                 <a class="menu__link click-area" href="/favorites">Favorite</a>
@@ -61,10 +62,9 @@ class MenuDrawer extends LitElement {
   }
 
   protected firstUpdated() {
+    this.triggerElement?.setAttribute("aria-expanded", "false");
+    this.triggerElement?.setAttribute("aria-controls", "navigation-menu");
     this.setAllTabIndex("-1");
-    this.triggerElement.addEventListener("click", async (e) => {
-      await this._openDrawer(e);
-    });
   }
 
   protected willUpdate(): void {
@@ -77,6 +77,7 @@ class MenuDrawer extends LitElement {
     e.stopPropagation();
 
     this.open = false;
+    this.triggerElement?.setAttribute("aria-expanded", "false");
     await this.updateComplete;
     this.cleanupFocusTrap();
   }
@@ -86,6 +87,7 @@ class MenuDrawer extends LitElement {
     e.stopPropagation();
 
     this.open = true;
+    this.triggerElement?.setAttribute("aria-expanded", "true");
     await this.updateComplete;
     this.focusTrap();
   }
@@ -112,7 +114,7 @@ class MenuDrawer extends LitElement {
   }
 
   private returnInitialFocus() {
-    this.triggerElement.focus();
+    this.triggerElement?.focus();
   }
 
   private cleanupFocusTrap() {
@@ -132,6 +134,13 @@ class MenuDrawer extends LitElement {
   private setAllTabIndex(tabIndex: "0" | "1" | "-1") {
     this._focusableEls.forEach((el) => {
       el.setAttribute("tabindex", tabIndex ?? "-1");
+    });
+  }
+
+  public setTriggerElement(element: HTMLElement) {
+    this.triggerElement = element;
+    this.triggerElement.addEventListener("click", async (e) => {
+      await this._openDrawer(e);
     });
   }
 }

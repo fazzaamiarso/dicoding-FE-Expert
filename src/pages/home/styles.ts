@@ -16,6 +16,7 @@ export const homeStyles = css`
   }
   .hero__img {
     width: 100%;
+    height: auto;
   }
   @media screen and (min-width: 1200px) {
     .hero__img {

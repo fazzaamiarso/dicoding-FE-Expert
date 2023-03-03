@@ -29,21 +29,37 @@ export default class HomePage extends LitElement {
             media="(max-width: 500px)"
             type="image/webp"
             srcset="images/webp/hero-image_2-small.webp"
+            width="480"
+            height="320"
           />
           <source
             media="(max-width: 500px)"
             type="image/jpeg"
             srcset="images/jpg/hero-image_2-small.jpg"
+            width="480"
+            height="320"
           />
-          <source type="image/webp" srcset="images/webp/hero-image_2.webp" />
-          <source type="image/jpeg" srcset="images/jpg/hero-image_2.jpg" />
+          <source
+            type="image/webp"
+            srcset="images/webp/hero-image_2.webp"
+            width="1350"
+            height="900"
+          />
+          <source
+            type="image/jpeg"
+            srcset="images/jpg/hero-image_2.jpg"
+            width="1350"
+            height="900"
+          />
           <img
             src="images/heros/hero-image_2.jpg"
             type="image/jpeg"
             media="all"
-            alt=""
             class="hero__img"
             fetchpriority="high"
+            alt=""
+            width="1350"
+            height="900"
           />
         </picture>
         <div class="hero__content">

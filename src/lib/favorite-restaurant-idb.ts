@@ -53,6 +53,12 @@ class FavoriteRestaurantsDB {
     return (await this._dbPromise).add(RESTAURANT_STORE_NAME, restaurant);
   }
 
+  public async insertMany(restaurants: Restaurant[]) {
+    if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
+    const tx = (await this._dbPromise).transaction(RESTAURANT_STORE_NAME, "readwrite");
+    await Promise.all([...restaurants.map((restaurant) => tx.store.add(restaurant)), tx.done]);
+  }
+
   public async updateSingle(restaurant: Restaurant) {
     if (!this._dbPromise) throw new Error("Your browser doesn't support this feature!");
     return (await this._dbPromise).put(RESTAURANT_STORE_NAME, restaurant);

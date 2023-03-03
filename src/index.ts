@@ -1,5 +1,6 @@
 import "regenerator-runtime"; /* for async await transpile */
 import "@/styles/main.scss";
+import "@/styles/font.css";
 import "@/components";
 import "@/pages";
 import HistoryRouter from "@/router/router";

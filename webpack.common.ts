@@ -41,6 +41,13 @@ const config: webpack.Configuration = {
           "sass-loader",
         ],
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "./fonts/[name][ext]",
+        },
+      },
     ],
   },
   plugins: [
@@ -53,6 +60,9 @@ const config: webpack.Configuration = {
         {
           from: path.resolve(__dirname, "public/"),
           to: path.resolve(__dirname, "dist/"),
+          globOptions: {
+            ignore: ["**/fonts/*"],
+          },
         },
       ],
     }),

@@ -11,6 +11,16 @@ Part of Dicoding Frontend Expert Path.
 - Workbox
 - Playwright + Vitest
 
+### File Overview
+- Integration and unit tests are in their adjacent `__test__` directory inside `/src`.
+- `/src`
+    - `/lib` contains 3rd party codes.
+    - `/components` contains lit elements.
+    - `/utils` contains small utility functions
+    - `/pages` contains pages for router
+    - `/router` contains the History Router
+    - `/types` contains typescript types and interface
+
 ### Get Started
 Please run `npm run build` before running development mode to process picture.
 ```bash

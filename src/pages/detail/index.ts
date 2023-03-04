@@ -64,6 +64,7 @@ export default class DetailPage extends LitElement {
                   class="detail__img"
                   src="${RestaurantAPI.buildImageURL(restaurant.pictureId, { size: "large" })}"
                   alt=""
+                  role="presentation"
                 />
                 <div class="detail__overlay"></div>
               </div>
